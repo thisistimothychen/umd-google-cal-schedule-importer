@@ -15,6 +15,6 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "https://ajax.googleapis.com/"
+    "<all_urls>"
   ]
 }
