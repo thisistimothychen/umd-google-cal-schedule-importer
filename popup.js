@@ -1,7 +1,9 @@
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
-    var pagecode = request.source;
-    pagecodediv.innerText = pagecode;
+    //split the class up according to their containers
+    var containers = request.source.split("END");
+
+    pagecodediv.innerText = containers[0];
   }
 });
 
