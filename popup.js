@@ -19,7 +19,6 @@ function onWindowLoad() {
   }, false);
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
   // get page HTML
   var pagecodediv = document.querySelector('#pagecodediv');
