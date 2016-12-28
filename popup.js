@@ -2,7 +2,6 @@ class classContainer {
   constructor(Name,Sec){
 
   }
-
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender) {
@@ -40,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }, function() {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
-      pagecodediv.innerText = 'There was an error injecting script : \n' + chrome.runtime.lastError.message;
+      pagecodediv.innerText = 'Oops! We ran into an error: ' + chrome.runtime.lastError.message;
     }
   });
 }, false);
