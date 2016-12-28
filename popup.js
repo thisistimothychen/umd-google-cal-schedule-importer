@@ -1,9 +1,20 @@
+class classContainer {
+  constructor(Name,Sec){
+
+  }
+
+}
+
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
     //split the class up according to their containers
     var containers = request.source.split("END");
+    var temp = "";
+    for(i = 0 ; i < containers.length ; i++){
+      temp += containers[i] + "\n";
+    }
 
-    pagecodediv.innerText = containers[0];
+    pagecodediv.innerText = temp;
   }
 });
 
