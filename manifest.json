@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "UMD GCal Schedule Importer",
-  "description": "Creates and fills a new Google Calendar with your UMD class schedule.",
+  "description": "Creates and fills a new Google Calendar with your UMD class schedule. Need to navigate to your Testudo schedule page.",
   "version": "1.0",
 
   "browser_action": {
@@ -15,6 +15,7 @@
   "permissions": [
     "activeTab",
     "tabs",
+    "identity",
     "<all_urls>"
   ]
 }
