@@ -7,28 +7,35 @@ class classContainer {
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
     //split the class up according to their containers
-    var containers = request.source.split("END");
-    var temp = "";
+    var returnedData = request.source;
+    var validPage = returnedData[1];
+    var containers = returnedData[0].split("END");
+    var schedule_output = "";
     for(i = 0 ; i < containers.length ; i++){
-      temp += containers[i] + "\n";
+      schedule_output += containers[i] + "\n";
     }
 
-    pagecodediv.innerText = temp;
+    pagecodediv.innerText = schedule_output;
+    if (validPage) {    // If page has needed elements
+      document.querySelector('#import-button').removeAttribute("hidden");
+      
+      // Add event listener for import schedule button
+      var checkPageButton = document.getElementById('import-button');
+      checkPageButton.addEventListener('click', function() {
+    
+        chrome.tabs.getSelected(null, function(tab) {
+          d = document;
+          
+          console.log(tab.url);
+        });
+        
+      }, false);
+    }
   }
 });
 
 function onWindowLoad() {
-  // validate current url
-  var checkPageButton = document.getElementById('generate');
-  checkPageButton.addEventListener('click', function() {
-
-    chrome.tabs.getSelected(null, function(tab) {
-      d = document;
-      
-      console.log(tab.url);
-    });
-    
-  }, false);
+  // TODO onWindowLoad stuff -- do we need it?
 }
 
 document.addEventListener('DOMContentLoaded', function() {

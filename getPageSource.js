@@ -4,10 +4,12 @@
 
 function DOMtoString(document_root) {
     var html = '', 
-        ccontainers = document_root.getElementsByClassName("course-card-container--info"),
-        temp = null;
+        ccontainers = document_root.getElementsByClassName("course-card-container--info");
     if (ccontainers.length == 0) {
         html = "Please navigate to the Testudo Show Schedule page";
+        validPage = false;
+    } else {
+        validPage = true;
     }
     
     for(i = 0 ; i < ccontainers.length; i++) {
@@ -18,7 +20,7 @@ function DOMtoString(document_root) {
     }
     
     // TODO also return the json or array holding courses
-    return html;
+    return [html, validPage];
 }
 
 chrome.runtime.sendMessage({
