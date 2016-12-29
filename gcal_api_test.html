@@ -56,10 +56,10 @@
         gapi.client.load('calendar', 'v3', listUpcomingEvents);
       }
       
-      function callCreateNewCalendar() {
-        gapi.client.load('calendar', 'v3', createNewCalendar);
+      function callCreateCalendar() {
+        gapi.client.load('calendar', 'v3', createCalendar);
       }
-
+      
       /**
        * Print the summary and start datetime/date of the next ten events in
        * the authorized user's calendar. If no events are found an
@@ -108,7 +108,7 @@
       }
       
       
-      function createNewCalendar() {
+      function createCalendar() {
         var request = gapi.client.calendar.calendars.insert({
           'summary': 'UMD Schedule',
           'timezone': 'America/New_York'
@@ -116,8 +116,49 @@
 
         request.execute(function(resp) {
           console.log(resp);
+          console.log(resp.id);
+          
+          // Populate with events
+          createEvents(resp.id);
         });
       }
+      
+      function createEvents(calId) {
+        var event = {
+          'summary': 'Course Number',
+          'location': 'Room Number',
+          'description': 'Description',
+          'start': {
+            // get start date of semester programatically
+            'dateTime': '2016-12-30T11:00:00',
+            'timeZone': 'America/New_York'
+          },
+          'end': {
+            'dateTime': '2016-12-30T12:15:00',
+            'timeZone': 'America/New_York'
+          }
+          // , 'recurrence': [
+          //   'RRULE:FREQ=WEEKLY;UNTIL=2017-01-20'
+          // ]
+          // , 'reminders': {
+          //   'useDefault': false,
+          //   'overrides': [
+          //     {'method': 'email', 'minutes': 24 * 60},
+          //     {'method': 'popup', 'minutes': 10}
+          //   ]
+          // }
+        };
+        
+        var request = gapi.client.calendar.events.insert({
+          'calendarId': calId,
+          'resource': event
+        });
+
+        request.execute(function(event) {
+          appendPre('Event created: ' + event.htmlLink);
+        });
+      }
+      
 
     </script>
     <script src="https://apis.google.com/js/client.js?onload=checkAuth">
@@ -134,7 +175,7 @@
     <button id="display-events-button" onclick="callListUpcomingEvents()">
       Display Events
     </button>
-    <button id="new-cal-button" onclick="callCreateNewCalendar()">
+    <button id="new-cal-button" onclick="callCreateCalendar()">
       Create New Calendar
     </button>
     <pre id="output"></pre>
