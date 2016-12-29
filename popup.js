@@ -1,7 +1,19 @@
+class classContainer {
+  constructor(Name,Sec){
+
+  }
+}
+
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
-    var pagecode = request.source;
-    pagecodediv.innerText = pagecode;
+    //split the class up according to their containers
+    var containers = request.source.split("END");
+    var temp = "";
+    for(i = 0 ; i < containers.length ; i++){
+      temp += containers[i] + "\n";
+    }
+
+    pagecodediv.innerText = temp;
   }
 });
 
@@ -19,7 +31,6 @@ function onWindowLoad() {
   }, false);
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
   // get page HTML
   var pagecodediv = document.querySelector('#pagecodediv');
@@ -28,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }, function() {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
-      pagecodediv.innerText = 'There was an error injecting script : \n' + chrome.runtime.lastError.message;
+      pagecodediv.innerText = 'Oops! We ran into an error: ' + chrome.runtime.lastError.message;
     }
   });
 }, false);
