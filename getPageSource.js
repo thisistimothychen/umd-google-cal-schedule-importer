@@ -11,11 +11,7 @@ function DOMtoString(document_root) {
     }
    
     for(i = 0 ; i < ccontainers.length; i++) {
-      if (i == 0) {
-        html += ccontainers[i].innerText.substring(1) + "END";
-      } else {
-        html += ccontainers[i].innerText + "END";
-      }
+      html += ccontainers[i].innerText.substring(1) + "END";
     }
  
 
