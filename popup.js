@@ -1,9 +1,3 @@
-class classContainer {
-  constructor(Name,Sec){
-
-  }
-}
-
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
     //split the class up according to their containers
@@ -18,17 +12,17 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     pagecodediv.innerText = schedule_output;
     if (validPage) {    // If page has needed elements
       document.querySelector('#import-button').removeAttribute("hidden");
-      
+
       // Add event listener for import schedule button
       var checkPageButton = document.getElementById('import-button');
       checkPageButton.addEventListener('click', function() {
-    
+
         chrome.tabs.getSelected(null, function(tab) {
           d = document;
-          
+
           console.log(tab.url);
         });
-        
+
       }, false);
     }
   }
