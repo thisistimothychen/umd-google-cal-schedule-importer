@@ -112,7 +112,6 @@ function DOMtoString(document_root) {
       // });
 
 
-
       console.log("Course name: " + courseTitle);
       console.log("Section: " + sectionCode);
       console.log("Location: " + roomLocations.toString());
