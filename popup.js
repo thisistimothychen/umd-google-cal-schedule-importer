@@ -3,13 +3,39 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     //split the class up according to their containers
     var returnedData = request.source;
     var validPage = returnedData[1];
-    var containers = returnedData[0].split("END");
-    var schedule_output = "";
-    for(i = 0 ; i < containers.length ; i++){
-      schedule_output += containers[i] + "\n";
-    }
+    var courseEventInfo = returnedData[2];
 
-    pagecodediv.innerText = schedule_output;
+    var containers = returnedData[0].split("END");
+    var scheduleTextFromPage = "";
+    for(i = 0 ; i < containers.length ; i++){
+      scheduleTextFromPage += containers[i] + "\n";
+    }
+    //pagecodediv.innerText = scheduleTextFromPage;
+
+    //   "courseTitle": courseTitle,
+    //   "section": sectionCode,
+    //   "classType": classType,
+    //   "location": roomLocation,
+    //   "startDate": classStartDate,
+    //   "endDate": classEndDate
+    var prettyOutput = "";
+    for (i = 0; i < courseEventInfo.length; i++) {
+      var divHTML = "<div>\n"
+      divHTML += courseEventInfo[i]["courseTitle"] + " (" + courseEventInfo[i]["section"] + ") - " + courseEventInfo[i]["classType"] + "<br/>\n";
+      divHTML += courseEventInfo[i]["location"] + "<br/>\n";
+
+      startDate = new Date(courseEventInfo[i]["startDate"]);
+      endDate = new Date(courseEventInfo[i]["endDate"]);
+      divHTML += courseEventInfo[i]["startDate"].split(" ")[0] + " " + startDate.getHours() + ":" + courseEventInfo[i]["startDate"].split(" ")[4].split(":")[1] + " to ";
+      divHTML += endDate.getHours() + ":" + courseEventInfo[i]["endDate"].split(" ")[4].split(":")[1] + "<br/>\n";
+      divHTML += "</div>";
+      divHTML += "<hr/>";
+
+      prettyOutput += divHTML;
+    }
+    pagecodediv.innerHTML = prettyOutput;
+
+
     if (validPage) {    // If page has needed elements
       document.querySelector('#import-button').removeAttribute("hidden");
 

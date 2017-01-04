@@ -12,8 +12,6 @@ function getSemesterLastDay() {
 }
 
 function DOMtoString(document_root) {
-
-
     var html = '',
         ccontainers = document_root.getElementsByClassName("course-card-container--info"),
         courseEventInfo = new Array();
@@ -193,20 +191,11 @@ function DOMtoString(document_root) {
           courseEventInfo.push({
             "courseTitle": courseTitle,
             "section": sectionCode,
+            "classType": classType,
             "location": roomLocation,
-            "startDate": classStartDate,
-            "endDate": classEndDate
+            "startDate": classStartDate.toString(),
+            "endDate": classEndDate.toString()
           });
-
-          console.log("Start Date: " + classStartDate);
-          console.log("End Date: " + classEndDate);
-          console.log("Start Time: " + startHour + ":" + startMin);
-          console.log("End Time: " + endHour + ":" + endMin);
-          // console.log("Course name: " + courseTitle);
-          // console.log("Section: " + sectionCode);
-          // console.log("Class Type: " + classTypes.toString());
-          // console.log("Location: " + roomLocations.toString());
-          // console.log("Time: " + timeLines.toString());
         }
       }
     }
@@ -214,7 +203,7 @@ function DOMtoString(document_root) {
     console.log(courseEventInfo);
 
     // TODO also return the json or array holding courses
-    return [html, validPage];
+    return [html, validPage, courseEventInfo];
 }
 
 chrome.runtime.sendMessage({
