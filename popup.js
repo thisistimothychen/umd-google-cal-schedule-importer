@@ -28,6 +28,9 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
     // Generate HTML code to append to chrome extension tab
     var prettyOutput = "";
+    // Initial HTML
+    prettyOutput += "<p>Here is what we found in your schedule. If it looks good to you, go ahead and click the Import button at the bottom of this tab!</p><br/>\n<hr/>";
+
     for (i = 0; i < courseEventInfo.length; i++) {
       var divHTML = "<div>\n"
       divHTML += courseEventInfo[i]["courseTitle"] + " (" + courseEventInfo[i]["section"] + ") - " + courseEventInfo[i]["classType"] + "<br/>\n";
