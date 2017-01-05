@@ -5,6 +5,12 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     var validPage = returnedData[1];
     var courseEventInfo = returnedData[2];
 
+    // Sort courses by date
+    courseEventInfo.sort(function(a, b) {
+      return (new Date(a["startDate"]).getDay()) - (new Date(b["startDate"]).getDay());
+    });
+
+    // Get output in terms of plain text from scraping
     var containers = returnedData[0].split("END");
     var scheduleTextFromPage = "";
     for(i = 0 ; i < containers.length ; i++){
