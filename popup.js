@@ -18,12 +18,15 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     }
     //pagecodediv.innerText = scheduleTextFromPage;
 
-    //   "courseTitle": courseTitle,
-    //   "section": sectionCode,
-    //   "classType": classType,
-    //   "location": roomLocation,
-    //   "startDate": classStartDate,
-    //   "endDate": classEndDate
+    /* Info in JSON object array "courseEventInfo"
+      "courseTitle": courseTitle,
+      "section": sectionCode,
+      "classType": classType,
+      "location": roomLocation,
+      "startDate": classStartDate,
+      "endDate": classEndDate */
+
+    // Generate HTML code to append to chrome extension tab
     var prettyOutput = "";
     for (i = 0; i < courseEventInfo.length; i++) {
       var divHTML = "<div>\n"
