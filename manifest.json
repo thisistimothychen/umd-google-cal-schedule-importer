@@ -4,7 +4,7 @@
   "name": "UMD GCal Schedule Importer",
   "description": "Creates and fills a new Google Calendar with your UMD class schedule. Need to navigate to your Testudo schedule page in order to use.",
   "version": "1.0.9",
-
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+040iHS89Zz7qMFUa+9zDtaP+PV7vrOJ/Mfb0fXcXuaIvZxkcDQxIZQWBRysZpybM7r28UmaTUZ6AaKhv+46CXtgafaKBXkOFjMNHzve+b6ishGpFJaWMmkr9P55BXPUenwNnfjG7fOBsuoL+jYwuD5eScCZlb9Da4//9h5J8wjy0yzqWFvrxHkFkUazgo4Cf6mA0fEJvpFMylMukIPYmqvrjr8sqsnyejnOzYwXt3dXxkdzpCI+uw5CZIdB89rjZb6Aw5/QQdp3/ceofg+6dIZdWkZVCw8DjIaTxBiDpbQoBJrkwCXisKxQT3GE2+Nh2owRBN+toL8oUl14gyA7QIDAQAB",
   "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_popup": "popup.html"
@@ -16,7 +16,8 @@
     "activeTab",
     "tabs",
     "identity",
-    "<all_urls>"
-  ]
-
+    "<all_urls>",
+    "https://apis.google.com/*"
+  ],
+  "content_security_policy": "script-src 'self' https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en_US.i0xByvRGaww.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCPwTfAUzE6XMjHX2OFK5MEMNlittQ/cb=gapi.loaded_0 https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en.oKHdHV2xpm0.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCNd8FlX7D-ugulSNNOrsQOkuRZJKA/cb=gapi.loaded_0; object-src 'self'"
 }

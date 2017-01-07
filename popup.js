@@ -52,15 +52,31 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
       document.querySelector('#import-button').removeAttribute("hidden");
 
       // Add event listener for import schedule button
-      var checkPageButton = document.getElementById('import-button');
-      checkPageButton.addEventListener('click', function() {
-
-        chrome.tabs.getSelected(null, function(tab) {
+      var importScheduleButton = document.getElementById('import-button');
+      importScheduleButton.addEventListener('click', function() {
+        // Commented code gets the URL of the current tab open. Not needed but kept in case.
+        /* chrome.tabs.getSelected(null, function(tab) {
           d = document;
-
           console.log(tab.url);
-        });
+        }); */
+        
+        console.log("importScheduleButton has been clicked.");
+        // Initiate GCal scheduling functionality
+        authResult = handleAuthClick(event);
+        console.log("authResult: " + authResult);
 
+        if (authResult) {
+          console.log("AUTHORIZED");
+
+          // Create new UMD Calendar
+          newCalId = gapi.client.load('calendar', 'v3', createCalendar);
+          console.log(newCalId);
+
+          // createEvents(calId, courseEventInfo);   // Populate with events
+        } else {  // Need to reauthorize GCal
+          console.log("NOT AUTHORIZED");
+          // TODO reauth GCal -- loop?
+        }
       }, false);
     }
   }
