@@ -11,6 +11,7 @@
        * Check if current user has authorized this application.
        */
       function checkAuth() {
+        console.log("checkAuth()");
         gapi.auth.authorize(
           {
             'client_id': CLIENT_ID,
@@ -25,10 +26,13 @@
        * @param {Object} authResult Authorization result.
        */
       function handleAuthResult(authResult) {
+        console.log("handleAuthResult()");
         var authorizeDiv = document.getElementById('authorize-div');
+        var gCalActionsDiv = document.getElementById('gcal-actions-div');
         if (authResult && !authResult.error) {
           // Hide auth UI, then load client library.
           authorizeDiv.style.display = 'none';
+          gCalActionsDiv.style.display = 'inline';
         } else {
           // Show auth UI, allowing the user to initiate authorization by
           // clicking authorize button.
@@ -42,6 +46,7 @@
        * @param {Event} event Button click event.
        */
       function handleAuthClick(event) {
+        console.log("handleAuthClick()");
         gapi.auth.authorize(
           {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
           handleAuthResult);
@@ -55,11 +60,11 @@
       function callListUpcomingEvents() {
         gapi.client.load('calendar', 'v3', listUpcomingEvents);
       }
-      
+
       function callCreateCalendar() {
         gapi.client.load('calendar', 'v3', createCalendar);
       }
-      
+
       /**
        * Print the summary and start datetime/date of the next ten events in
        * the authorized user's calendar. If no events are found an
@@ -94,7 +99,7 @@
 
         });
       }
-  
+
       /**
        * Append a pre element to the body containing the given message
        * as its text node.
@@ -106,8 +111,8 @@
         var textContent = document.createTextNode(message + '\n');
         pre.appendChild(textContent);
       }
-      
-      
+
+
       function createCalendar() {
         var request = gapi.client.calendar.calendars.insert({
           'summary': 'UMD Schedule',
@@ -117,12 +122,12 @@
         request.execute(function(resp) {
           console.log(resp);
           console.log(resp.id);
-          
+
           // Populate with events
           createEvents(resp.id);
         });
       }
-      
+
       function createEvents(calId) {
         var event = {
           'summary': 'Course Number',
@@ -148,7 +153,7 @@
           //   ]
           // }
         };
-        
+
         var request = gapi.client.calendar.events.insert({
           'calendarId': calId,
           'resource': event
@@ -158,13 +163,14 @@
           appendPre('Event created: ' + event.htmlLink);
         });
       }
-      
+
 
     </script>
     <script src="https://apis.google.com/js/client.js?onload=checkAuth">
     </script>
   </head>
   <body>
+    <p>Run this file using 'python -m http.server 8000' or 'python3 -m http.server 8000'</p>
     <div id="authorize-div" style="display: none">
       <span>Authorize access to Google Calendar API</span>
       <!--Button for the user to click to initiate auth sequence -->
@@ -172,12 +178,14 @@
         Authorize
       </button>
     </div>
-    <button id="display-events-button" onclick="callListUpcomingEvents()">
-      Display Events
-    </button>
-    <button id="new-cal-button" onclick="callCreateCalendar()">
-      Create New Calendar
-    </button>
+    <div id="gcal-actions-div" style="display: none">
+      <button id="display-events-button" onclick="callListUpcomingEvents()">
+        Display Events
+      </button>
+      <button id="new-cal-button" onclick="callCreateCalendar()">
+        Create New Calendar
+      </button>
+    </div>
     <pre id="output"></pre>
   </body>
 </html>
