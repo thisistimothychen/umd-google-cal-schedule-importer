@@ -67,52 +67,73 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         //       { 'token': access_token },
         //       getTokenAndXhr);
         
-        chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
-          // Use the token.
-          console.log("TOKEN: " + token);
-          
-          // POST request to create a new calendar
-          var url = "https://www.googleapis.com/calendar/v3/calendars";
-          // var params = "summary=UMD&timeZone=America/New_York";
-          var params = {
-            "summary": "UMD Schedule",
-            "timeZone": "America/New_York"
-          };
-          var xhr = new XMLHttpRequest();
-          xhr.open("POST", url, true);
-
-          //Send the proper header information along with the request
-          xhr.setRequestHeader('Content-Type', 'application/json');
-          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-          
-          xhr.send(JSON.stringify(params));
-          // xhr.send(params);
-        });
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        importSchedule();
       }, false);
     }
   }
 });
+
+function importSchedule() {
+  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+    // Use the token.
+    console.log("TOKEN: " + token);
+    
+    // POST request to create a new calendar
+    var url = "https://www.googleapis.com/calendar/v3/calendars";
+    var params = {
+      "summary": "UMD Schedule",
+      "timeZone": "America/New_York"
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+
+    //Send the proper header information along with the request
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var newCalId = (JSON.parse(xhr.responseText).id);
+            importEvents(newCalId, token);
+        }
+    }
+    
+    xhr.send(JSON.stringify(params));
+  });
+}
+
+function importEvents(calId, token) {
+  // POST request to create a new event
+  var url = "https://www.googleapis.com/calendar/v3/calendars/" + calId + "/events";
+  var params = {
+    "summary": "Test Event from Chrome Extension",
+    "start": {
+      "date": "2017-01-16",
+      "timeZone": "America/New_York"
+    },
+    "end": {
+      "date": "2017-01-16",
+      "timeZone": "America/New_York"
+    }
+  };
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+
+  //Send the proper header information along with the request
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+  
+  xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+          console.log(JSON.parse(xhr.responseText));
+      }
+  }
+  
+  xhr.send(JSON.stringify(params));
+}
+
+
+
 
 function onWindowLoad() {
   // TODO onWindowLoad stuff -- do we need it?
