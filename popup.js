@@ -77,7 +77,6 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 function importSchedule() {
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Use the token.
-    console.log("TOKEN: " + token);
 
     // POST request to create a new calendar
     var url = "https://www.googleapis.com/calendar/v3/calendars";
@@ -104,9 +103,6 @@ function importSchedule() {
 }
 
 function importEvents(calId, token) {
-  console.log(courseEventInfo);
-
-
   var semEndDateParam = new Date(semEndDate);
   semEndDateParam.setDate(semEndDateParam.getDate() + 1);
   semEndDateParamStr = semEndDateParam.toJSON().substr(0,4) + semEndDateParam.toJSON().substr(5,2) + semEndDateParam.toJSON().substr(8,2);
@@ -143,8 +139,6 @@ function importEvents(calId, token) {
         "RRULE:FREQ=WEEKLY;UNTIL=" + semEndDateParamStr
       ]
     };
-
-    console.log(params);
 
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);

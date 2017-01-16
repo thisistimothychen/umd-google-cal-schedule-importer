@@ -204,7 +204,7 @@ function DOMtoString(document_root) {
       }
     }
 
-    console.log(courseEventInfo);
+    // console.log(courseEventInfo);
 
     // TODO also return the json or array holding courses
     return [html, validPage, courseEventInfo, semEndDate.toString()];
