@@ -39,8 +39,8 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
       startDate = new Date(courseEventInfo[i]["startDate"]);
       endDate = new Date(courseEventInfo[i]["endDate"]);
-      divHTML += courseEventInfo[i]["startDate"].split(" ")[0] + " " + startDate.getHours() + ":" + courseEventInfo[i]["startDate"].split(" ")[4].split(":")[1] + " to ";
-      divHTML += endDate.getHours() + ":" + courseEventInfo[i]["endDate"].split(" ")[4].split(":")[1] + "<br/>\n";
+      divHTML += courseEventInfo[i]["startDate"].split(" ")[0] + " " + startDate.getHours() + ":" + courseEventInfo[i]["startDate"].split(" ")[4].split(":")[1] + courseEventInfo[i]["startPmAm"] + " to ";
+      divHTML += endDate.getHours() + ":" + courseEventInfo[i]["endDate"].split(" ")[4].split(":")[1] + courseEventInfo[i]["endPmAm"] + "<br/>\n";
       divHTML += "</div>";
       divHTML += "<hr/>";
 
@@ -60,14 +60,14 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
           d = document;
           console.log(tab.url);
         }); */
-        
+
         console.log("importScheduleButton has been clicked.");
         // TODO Initiate GCal scheduling functionality
-        
+
         // chrome.identity.removeCachedAuthToken(
         //       { 'token': access_token },
         //       getTokenAndXhr);
-        
+
         importSchedule();
       }, false);
     }
@@ -78,7 +78,7 @@ function importSchedule() {
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Use the token.
     console.log("TOKEN: " + token);
-    
+
     // POST request to create a new calendar
     var url = "https://www.googleapis.com/calendar/v3/calendars";
     var params = {
@@ -87,67 +87,76 @@ function importSchedule() {
     };
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
-  
+
     //Send the proper header information along with the request
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-    
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             var newCalId = (JSON.parse(xhr.responseText).id);
             importEvents(newCalId, token);
         }
     }
-    
+
     xhr.send(JSON.stringify(params));
   });
 }
 
 function importEvents(calId, token) {
   console.log(courseEventInfo);
-  
+
   // Get timezone offset to fix toJSON() error
-  var timezoneOffset = (new Date()).getTimezoneOffset() * 60000;
-  
+  // var timezoneOffset = (new Date()).getTimezoneOffset() * 60000;
+
   for (var i = 0; i < courseEventInfo.length; i++) {
     // POST request to create a new event
     var url = "https://www.googleapis.com/calendar/v3/calendars/" + calId + "/events";
-    
+
     var course = courseEventInfo[i];
-    var startDateWithOffset = (new Date(course.startDate) - timezoneOffset)
-    var endDateWithOffset = (new Date(course.endDate) - timezoneOffset)
+
+    // Set start/end dates taking into consideration am/pm
+    var startDate = (new Date(course.startDate))
+    if (course.startPmAm == "pm" && parseInt(startDate.getHours()) < 12) {
+      startDate.setHours(startDate.getHours()+12);
+    }
+    var endDate = (new Date(course.endDate))
+    if (course.endPmAm == "pm" && parseInt(endDate.getHours()) < 12) {
+      endDate.setHours(endDate.getHours()+12);
+    }
+
     var params = {
       "summary": course.courseTitle + " (" + course.classType + ")",
       "location": course.location,
       "description": "Section " + course.section,
       "start": {
-        "dateTime": (new Date(startDateWithOffset)).toJSON(),
+        "dateTime": startDate.toJSON(),
         "timeZone": "America/New_York"
       },
       "end": {
-        "dateTime": (new Date(endDateWithOffset)).toJSON(),
+        "dateTime": endDate.toJSON(),
         "timeZone": "America/New_York"
       },
       "recurrence": [
         "RRULE:FREQ=WEEKLY;UNTIL=" + (new Date(semEndDate)).toJSON().substr(0,4) + (new Date(semEndDate)).toJSON().substr(5,2) + (new Date(semEndDate)).toJSON().substr(8,2)
       ]
     };
-    
+
     console.log(params);
-    
+
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
-  
+
     //Send the proper header information along with the request
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-    
+
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
             console.log(JSON.parse(xhr.responseText));
         }
     }
-    
+
     xhr.send(JSON.stringify(params));
   }
 }
