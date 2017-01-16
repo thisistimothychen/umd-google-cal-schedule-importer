@@ -203,7 +203,7 @@ function DOMtoString(document_root) {
     console.log(courseEventInfo);
 
     // TODO also return the json or array holding courses
-    return [html, validPage, courseEventInfo];
+    return [html, validPage, courseEventInfo, semEndDate.toString()];
 }
 
 chrome.runtime.sendMessage({
