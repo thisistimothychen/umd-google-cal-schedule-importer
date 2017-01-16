@@ -1,4 +1,5 @@
 var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>'
+var authenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4">Allow Google Calendar Access</button>'
 var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red accent-4">Take me to Testudo!</button>'
 
 
@@ -54,26 +55,41 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
       prettyOutput += divHTML;
     }
-    pagecodediv.innerHTML = prettyOutput;
 
 
     if (validPage) {    // If page has needed elements
-      document.querySelector('#button-div').innerHTML = importButtonHTML;
-
-      // Add event listener for import schedule button
-      var importScheduleButton = document.getElementById('import-button');
-      importScheduleButton.addEventListener('click', function() {
-        
-
-        console.log("importScheduleButton has been clicked.");
-        // TODO Initiate GCal scheduling functionality
-
-        // chrome.identity.removeCachedAuthToken(
-        //       { 'token': access_token },
-        //       getTokenAndXhr);
-
-        importSchedule();
-      }, false);
+      chrome.identity.getAuthToken({}, function(token) {
+        if (token==null) {
+          // User hasn't authenticated in yet
+          pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!";
+          
+          document.querySelector('#button-div').innerHTML = authenticateButtonHTML;
+          document.getElementById('authenticate-button').addEventListener('click', function() {
+            console.log("authenticateButton has been clicked.");
+    
+            // Initiate GCal scheduling functionality
+            authenticate();
+          }, false);
+        } else {
+          // User has already authenticated; continue.
+          pagecodediv.innerHTML = prettyOutput;
+          
+          document.querySelector('#button-div').innerHTML = importButtonHTML;
+    
+          // Add event listener for import schedule button
+          var importScheduleButton = document.getElementById('import-button');
+          importScheduleButton.addEventListener('click', function() {
+            console.log("importScheduleButton has been clicked.");
+    
+            // chrome.identity.removeCachedAuthToken(
+            //       { 'token': access_token },
+            //       getTokenAndXhr);
+    
+            // Initiate GCal scheduling functionality
+            importSchedule();
+          }, false);
+        }
+      });
     } else {
       // Commented code gets the URL of the current tab open.
       chrome.tabs.getSelected(null, function(tab) {
@@ -99,6 +115,17 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     }
   }
 });
+
+
+function authenticate() {
+  alert('After authenticating, come back to this page and use the extension again! The "Allow Access" button will change to allow importing!');
+  
+  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+    // Check the token.
+    console.log(token);
+  });
+}
+
 
 function importSchedule() {
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
