@@ -132,9 +132,8 @@ function DOMtoString(document_root) {
         startTime = timeLineInfo[1];
         endTime = timeLineInfo[3];
 
-        // get semester start/end dates
+        // get semester start dates
         semFirstDate = getSemesterFirstDay();
-        semEndDate = getSemesterLastDay();
         semFirstDay = semFirstDate.getDay();
         //semEndDay = // TODO Need or don't need? Look at GCal API repeat requirements
 
@@ -207,7 +206,7 @@ function DOMtoString(document_root) {
     // console.log(courseEventInfo);
 
     // TODO also return the json or array holding courses
-    return [html, validPage, courseEventInfo, semEndDate.toString()];
+    return [html, validPage, courseEventInfo,  getSemesterLastDay().toString()];
 }
 
 chrome.runtime.sendMessage({
