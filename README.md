@@ -3,10 +3,10 @@ Imports your UMD class schedule right into a new Google Calendar!
 
 
 Chrome extension parsing the page data:
-![Screenshot2](screenshots/screenshot2.JPG)
+![Screenshot1](screenshots/ext_screenshot1.png)
 
 The final result:
-![Screenshot3](screenshots/screenshot3.JPG)
+![Screenshot2](screenshots/ext_screenshot2.png)
 
 Notice to navigate to Testudo schedule page:
-![Screenshot1](screenshots/screenshot1.JPG)
+![Screenshot3](screenshots/ext_screenshot3.png)
