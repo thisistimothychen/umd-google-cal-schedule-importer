@@ -128,6 +128,8 @@ function authenticate() {
 
 
 function importSchedule() {
+  document.querySelector('#import-button').className += " disabled";
+  
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Use the token.
     console.log(token);
@@ -149,13 +151,14 @@ function importSchedule() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
           if (xhr.status === 200) {
             var newCalId = (JSON.parse(xhr.responseText).id);
+            pagecodediv.innerText = 'Importing your schedule...';
+            document.querySelector('#import-button').remove();
             importEvents(newCalId, token);
           } else {
             console.log("Error", xhr.statusText);
             pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
             document.querySelector('#import-button').remove();
           }
-
         }
     }
 
@@ -225,8 +228,7 @@ function importEvents(calId, token) {
 function postImportActions() {
   console.log("Finished importing courses");
   console.log(pagecodediv);
-  pagecodediv.innerText = 'Completed schedule import.';
-  document.querySelector('#import-button').remove();
+  // pagecodediv.innerText = 'Completed schedule import.';
 
   window.open('https://calendar.google.com/calendar/render#main_7%7Cmonth','_blank');
 }
