@@ -24,6 +24,7 @@ function checkAuth() {
  */
 function handleAuthResult(authResult) {
   console.log("handleAuthResult()");
+  /*
   // var authorizeDiv = document.getElementById('authorize-div');
   if (authResult && !authResult.error) {
     // Hide auth UI, then load client library.
@@ -37,6 +38,23 @@ function handleAuthResult(authResult) {
     // authorizeDiv.style.display = 'inline';
     return false;
   }
+  */
+  
+  
+  console.log("authResult: " + authResult);
+
+  if (authResult && !authResult.error) {
+    console.log("AUTHORIZED");
+
+    // Create new UMD Calendar
+    newCalId = gapi.client.load('calendar', 'v3', createCalendar);
+    console.log("newCalId: " + newCalId);
+
+    // createEvents(calId, courseEventInfo);   // Populate with events
+  } else {  // Need to reauthorize GCal
+    console.log("NOT AUTHORIZED");
+    // TODO reauth GCal -- loop?
+  }
 }
 
 /**
@@ -44,10 +62,11 @@ function handleAuthResult(authResult) {
  */
 function handleAuthClick() {
   console.log("handleAuthClick()");
-  return handleAuthResult(gapi.auth.authorize(
+  gapi.auth.authorize(
     {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
-    handleAuthResult));
-  console.log("after handleAuthClick()");
+    handleAuthResult);
+  console.log("after handleAuthClick(), before return false");
+  return false;
   // return false;
 }
 
@@ -100,15 +119,20 @@ function listUpcomingEvents() {
 
 
 function createCalendar() {
+  console.log("In createCalendar()");
   var request = gapi.client.calendar.calendars.insert({
     'summary': 'UMD Schedule',
     'timezone': 'America/New_York'
   });
+  
+  console.log("All calendars: " + gapi.client.calendar.calendars);
 
   request.execute(function(resp) {
+    console.log(resp);
     newCalId = resp.id  // global scope to hack around nonaccessible return value
     return(newCalId);   // return newly created GCal ID
   });
+  console.log("Executed request in createCalendar()");
 }
 
 function createEvents(calId, eventData) {
