@@ -174,6 +174,8 @@ function postImportActions() {
   console.log(pagecodediv);
   pagecodediv.innerText = 'Completed schedule import.';
   document.querySelector('#import-button').setAttribute("hidden", true);
+
+  window.open('https://calendar.google.com/','_blank');
 }
 
 
