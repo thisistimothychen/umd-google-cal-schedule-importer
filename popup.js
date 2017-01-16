@@ -3,7 +3,8 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     //split the class up according to their containers
     var returnedData = request.source;
     var validPage = returnedData[1];
-    var courseEventInfo = returnedData[2];
+    courseEventInfo = returnedData[2];
+    semEndDate = returnedData[3];
 
     // Sort courses by date
     courseEventInfo.sort(function(a, b) {
@@ -86,7 +87,7 @@ function importSchedule() {
     };
     var xhr = new XMLHttpRequest();
     xhr.open("POST", url, true);
-
+  
     //Send the proper header information along with the request
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -103,33 +104,52 @@ function importSchedule() {
 }
 
 function importEvents(calId, token) {
-  // POST request to create a new event
-  var url = "https://www.googleapis.com/calendar/v3/calendars/" + calId + "/events";
-  var params = {
-    "summary": "Test Event from Chrome Extension",
-    "start": {
-      "date": "2017-01-16",
-      "timeZone": "America/New_York"
-    },
-    "end": {
-      "date": "2017-01-16",
-      "timeZone": "America/New_York"
+  console.log(courseEventInfo);
+  
+  // Get timezone offset to fix toJSON() error
+  var timezoneOffset = (new Date()).getTimezoneOffset() * 60000;
+  
+  for (var i = 0; i < courseEventInfo.length; i++) {
+    // POST request to create a new event
+    var url = "https://www.googleapis.com/calendar/v3/calendars/" + calId + "/events";
+    
+    var course = courseEventInfo[i];
+    var startDateWithOffset = (new Date(course.startDate) - timezoneOffset)
+    var endDateWithOffset = (new Date(course.endDate) - timezoneOffset)
+    var params = {
+      "summary": course.courseTitle + " (" + course.classType + ")",
+      "location": course.location,
+      "description": "Section " + course.section,
+      "start": {
+        "dateTime": (new Date(startDateWithOffset)).toJSON(),
+        "timeZone": "America/New_York"
+      },
+      "end": {
+        "dateTime": (new Date(endDateWithOffset)).toJSON(),
+        "timeZone": "America/New_York"
+      },
+      "recurrence": [
+        "RRULE:FREQ=WEEKLY;UNTIL=" + (new Date(semEndDate)).toJSON().substr(0,4) + (new Date(semEndDate)).toJSON().substr(5,2) + (new Date(semEndDate)).toJSON().substr(8,2)
+      ]
+    };
+    
+    console.log(params);
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+  
+    //Send the proper header information along with the request
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+    
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            console.log(JSON.parse(xhr.responseText));
+        }
     }
-  };
-  var xhr = new XMLHttpRequest();
-  xhr.open("POST", url, true);
-
-  //Send the proper header information along with the request
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-  
-  xhr.onreadystatechange = function() {
-      if (xhr.readyState == XMLHttpRequest.DONE) {
-          console.log(JSON.parse(xhr.responseText));
-      }
+    
+    xhr.send(JSON.stringify(params));
   }
-  
-  xhr.send(JSON.stringify(params));
 }
 
 
