@@ -1,3 +1,6 @@
+var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>'
+
+
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
     //split the class up according to their containers
@@ -5,7 +8,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     var validPage = returnedData[1];
     courseEventInfo = returnedData[2];
     semEndDate = returnedData[3];
-
+    
     // Sort courses by date
     courseEventInfo.sort(function(a, b) {
       return (new Date(a["startDate"]).getDay()) - (new Date(b["startDate"]).getDay());
@@ -50,7 +53,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 
     if (validPage) {    // If page has needed elements
-      document.querySelector('#import-button').removeAttribute("hidden");
+      document.querySelector('#import-button-div').innerHTML = importButtonHTML;
 
       // Add event listener for import schedule button
       var importScheduleButton = document.getElementById('import-button');
@@ -70,6 +73,9 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
         importSchedule();
       }, false);
+    } else {
+      pagecodediv.innerHTML = 'Please navigate to the Testudo Show Schedule page.';
+      document.querySelector('#import-button').remove();
     }
   }
 });
@@ -100,7 +106,7 @@ function importSchedule() {
           } else {
             console.log("Error", xhr.statusText);
             pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
-            document.querySelector('#import-button').setAttribute("hidden", true);
+            document.querySelector('#import-button').remove();
           }
 
         }
@@ -173,7 +179,7 @@ function postImportActions() {
   console.log("Finished importing courses");
   console.log(pagecodediv);
   pagecodediv.innerText = 'Completed schedule import.';
-  document.querySelector('#import-button').setAttribute("hidden", true);
+  document.querySelector('#import-button').remove();
 
   window.open('https://calendar.google.com/','_blank');
 }
@@ -193,7 +199,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }, function() {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
-      pagecodediv.innerText = 'Oops! We ran into an error: ' + chrome.runtime.lastError.message;
+      pagecodediv.innerText = 'Uh Oh! We ran into an error (' + chrome.runtime.lastError.message + ')...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so that we can fix this issue!';
+      document.querySelector('#import-button').remove();
     }
   });
 }, false);

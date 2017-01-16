@@ -7,11 +7,35 @@
     <!-- <script src="https://apis.google.com/js/client.js?onload=checkAuth"></script> -->
     <script src="googleApiClient.js"></script> <!-- -->
     <script src="gCalFunctions.js"></script>
+    
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css">
+    <!-- Font Awesome -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
   </head>
   <body>
-    <h1>GCal Class Schedule Importer</h1>
-    <h3>University of Maryland, College Park</h3>
-    <div id="pagecodediv"></div>
-    <button id="import-button" hidden>Import Schedule</button>
+    <nav>
+      <div class="nav-wrapper">
+        <p class="center" style="margin: 0;"><b>Google Calendar Class Schedule Importer</b></p>
+      </div>
+    </nav>
+    
+    <div class="container">
+      <p><i>University of Maryland, College Park</i></p>
+      <div id="pagecodediv"></div>
+      <div id="import-button-div" class="center" style="padding-top:10px;">
+        <!-- <button id="import-button" hidden>Import Schedule</button> -->
+        <button id="import-button" class="btn red accent-4" hidden>Import Schedule</button>
+      </div>
+    </div>
+    
+    <footer class="page-footer red accent-4" style="padding-top: 10px;">
+        <div class="container">
+          <p class="grey-text text-lighten-4">
+            Made with <i class="fa fa-heart"></i> by <a href="http://www.github.com/timothychen01" style="color:white">Timothy Chen</a> and <a href="http://www.github.com/bberry1">Brandon Berry</a>.
+          </p>
+        </div>
+        <div class="footer-copyright red" style="height:10px;"></div>
+    </footer>
   </body>
 </html>
