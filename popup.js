@@ -70,6 +70,23 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
           // Use the token.
           console.log("TOKEN: " + token);
+          
+          // POST request to create a new calendar
+          var url = "https://www.googleapis.com/calendar/v3/calendars";
+          // var params = "summary=UMD&timeZone=America/New_York";
+          var params = {
+            "summary": "UMD Schedule",
+            "timeZone": "America/New_York"
+          };
+          var xhr = new XMLHttpRequest();
+          xhr.open("POST", url, true);
+
+          //Send the proper header information along with the request
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+          
+          xhr.send(JSON.stringify(params));
+          // xhr.send(params);
         });
         
         
