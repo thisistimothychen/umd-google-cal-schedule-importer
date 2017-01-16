@@ -77,6 +77,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 function importSchedule() {
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Use the token.
+    console.log(token);
 
     // POST request to create a new calendar
     var url = "https://www.googleapis.com/calendar/v3/calendars";
@@ -93,8 +94,15 @@ function importSchedule() {
 
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE) {
+          if (xhr.status === 200) {
             var newCalId = (JSON.parse(xhr.responseText).id);
             importEvents(newCalId, token);
+          } else {
+            console.log("Error", xhr.statusText);
+            pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
+            document.querySelector('#import-button').setAttribute("hidden", true);
+          }
+
         }
     }
 
@@ -106,6 +114,7 @@ function importEvents(calId, token) {
   var semEndDateParam = new Date(semEndDate);
   semEndDateParam.setDate(semEndDateParam.getDate() + 1);
   semEndDateParamStr = semEndDateParam.toJSON().substr(0,4) + semEndDateParam.toJSON().substr(5,2) + semEndDateParam.toJSON().substr(8,2);
+  var postImportActionsCalled = false;
 
   for (var i = 0; i < courseEventInfo.length; i++) {
     // POST request to create a new event
@@ -148,13 +157,23 @@ function importEvents(calId, token) {
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-            console.log(JSON.parse(xhr.responseText));
+        if (xhr.readyState == XMLHttpRequest.DONE && !postImportActionsCalled) {
+            // console.log(JSON.parse(xhr.responseText));
+            postImportActions();
+            postImportActionsCalled = true;
         }
     }
 
     xhr.send(JSON.stringify(params));
   }
+}
+
+// After schedule has been imported
+function postImportActions() {
+  console.log("Finished importing courses");
+  console.log(pagecodediv);
+  pagecodediv.innerText = 'Completed schedule import.';
+  document.querySelector('#import-button').setAttribute("hidden", true);
 }
 
 
