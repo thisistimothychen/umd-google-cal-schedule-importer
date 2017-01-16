@@ -106,8 +106,10 @@ function importSchedule() {
 function importEvents(calId, token) {
   console.log(courseEventInfo);
 
-  // Get timezone offset to fix toJSON() error
-  // var timezoneOffset = (new Date()).getTimezoneOffset() * 60000;
+
+  var semEndDateParam = new Date(semEndDate);
+  semEndDateParam.setDate(semEndDateParam.getDate() + 1);
+  semEndDateParamStr = semEndDateParam.toJSON().substr(0,4) + semEndDateParam.toJSON().substr(5,2) + semEndDateParam.toJSON().substr(8,2);
 
   for (var i = 0; i < courseEventInfo.length; i++) {
     // POST request to create a new event
@@ -138,7 +140,7 @@ function importEvents(calId, token) {
         "timeZone": "America/New_York"
       },
       "recurrence": [
-        "RRULE:FREQ=WEEKLY;UNTIL=" + (new Date(semEndDate)).toJSON().substr(0,4) + (new Date(semEndDate)).toJSON().substr(5,2) + (new Date(semEndDate)).toJSON().substr(8,2)
+        "RRULE:FREQ=WEEKLY;UNTIL=" + semEndDateParamStr
       ]
     };
 
