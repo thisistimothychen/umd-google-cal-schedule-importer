@@ -1,6 +1,6 @@
 body {
   font-size: 100%;
-  width: 300px;
+  width: 350px;
 }
 #status {
   /* avoid an excessively wide status text */
