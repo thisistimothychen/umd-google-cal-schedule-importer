@@ -1,5 +1,10 @@
 var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>'
+var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red accent-4">Take me to Testudo!</button>'
 
+
+function goToTestudo() {
+  chrome.tabs.create({url: "https://ntst.umd.edu/commonLogin?return-url=https%3A%2F%2Fntst.umd.edu%2Ftestudo%2Fmain%2FdropAdd"});
+}
 
 chrome.runtime.onMessage.addListener(function(request, sender) {
   if (request.action == "getSource") {
@@ -53,16 +58,12 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 
     if (validPage) {    // If page has needed elements
-      document.querySelector('#import-button-div').innerHTML = importButtonHTML;
+      document.querySelector('#button-div').innerHTML = importButtonHTML;
 
       // Add event listener for import schedule button
       var importScheduleButton = document.getElementById('import-button');
       importScheduleButton.addEventListener('click', function() {
-        // Commented code gets the URL of the current tab open. Not needed but kept in case.
-        /* chrome.tabs.getSelected(null, function(tab) {
-          d = document;
-          console.log(tab.url);
-        }); */
+        
 
         console.log("importScheduleButton has been clicked.");
         // TODO Initiate GCal scheduling functionality
@@ -74,8 +75,27 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         importSchedule();
       }, false);
     } else {
-      pagecodediv.innerHTML = 'Please navigate to the Testudo Show Schedule page.';
-      document.querySelector('#import-button').remove();
+      // Commented code gets the URL of the current tab open.
+      chrome.tabs.getSelected(null, function(tab) {
+        if (tab.url.includes("ntst.umd.edu")) {
+          // In schedule system but not at schedule page yet
+          pagecodediv.innerHTML = "You're almost there! Navigate to the show schedule page as shown below:";
+          document.querySelector('#import-button').remove();
+          
+          pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
+        } else {
+          // Not at schedule system yet
+          pagecodediv.innerHTML = 'Please navigate to the Testudo Show Schedule page as shown below:';
+          pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
+          
+          document.querySelector('#import-button').remove();
+          document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
+          
+          document.getElementById('testudo-link-button').addEventListener('click', function() {
+            goToTestudo();
+          });
+        }
+      });
     }
   }
 });
@@ -181,7 +201,7 @@ function postImportActions() {
   pagecodediv.innerText = 'Completed schedule import.';
   document.querySelector('#import-button').remove();
 
-  window.open('https://calendar.google.com/','_blank');
+  window.open('https://calendar.google.com/calendar/render#main_7%7Cmonth','_blank');
 }
 
 
