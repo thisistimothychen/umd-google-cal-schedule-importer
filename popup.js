@@ -61,22 +61,37 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         }); */
         
         console.log("importScheduleButton has been clicked.");
-        // Initiate GCal scheduling functionality
-        authResult = handleAuthClick(event);
-        console.log("authResult: " + authResult);
-
-        if (authResult) {
-          console.log("AUTHORIZED");
-
-          // Create new UMD Calendar
-          newCalId = gapi.client.load('calendar', 'v3', createCalendar);
-          console.log(newCalId);
-
-          // createEvents(calId, courseEventInfo);   // Populate with events
-        } else {  // Need to reauthorize GCal
-          console.log("NOT AUTHORIZED");
-          // TODO reauth GCal -- loop?
-        }
+        // TODO Initiate GCal scheduling functionality
+        
+        // chrome.identity.removeCachedAuthToken(
+        //       { 'token': access_token },
+        //       getTokenAndXhr);
+        
+        chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+          // Use the token.
+          console.log("TOKEN: " + token);
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
       }, false);
     }
   }
