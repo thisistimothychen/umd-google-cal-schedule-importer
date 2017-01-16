@@ -141,8 +141,10 @@ function DOMtoString(document_root) {
         // separate out timecodes and parse into integers
         startHour = parseInt(startTime.match(/(\d+)/g)[0]);
         startMin = parseInt(startTime.match(/(\d+)/g)[1]);
+        startPmAm = startTime.substr(-2);
         endHour = parseInt(endTime.match(/(\d+)/g)[0]);
         endMin = parseInt(endTime.match(/(\d+)/g)[1]);
+        endPmAm = endTime.substr(-2);
 
         // regex to separate each day of the week
         daysArray = daysStr.match(/([A-Z][a-z]*)/g)
@@ -194,7 +196,9 @@ function DOMtoString(document_root) {
             "classType": classType,
             "location": roomLocation,
             "startDate": classStartDate.toString(),
-            "endDate": classEndDate.toString()
+            "startPmAm": startPmAm,
+            "endDate": classEndDate.toString(),
+            "endPmAm": endPmAm
           });
         }
       }
