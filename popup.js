@@ -66,6 +66,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
           document.querySelector('#button-div').innerHTML = authenticateButtonHTML;
           document.getElementById('authenticate-button').addEventListener('click', function() {
             console.log("authenticateButton has been clicked.");
+            _gaq.push(['_trackEvent', 'authenticateButton', 'clicked']);
     
             // Initiate GCal scheduling functionality
             authenticate();
@@ -80,6 +81,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
           var importScheduleButton = document.getElementById('import-button');
           importScheduleButton.addEventListener('click', function() {
             console.log("importScheduleButton has been clicked.");
+            _gaq.push(['_trackEvent', 'importScheduleButton', 'clicked']);
     
             // chrome.identity.removeCachedAuthToken(
             //       { 'token': access_token },
