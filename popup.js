@@ -250,10 +250,18 @@ document.addEventListener('DOMContentLoaded', function() {
   }, function() {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
-      pagecodediv.innerText = 'Uh Oh! We ran into an error (' + chrome.runtime.lastError.message + ')...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so that we can fix this issue!';
-      pagecodediv.innerHTML += "<br/><br/>Please make sure you're on the Testudo Show Schedule page as shown below:";
-      pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
+      console.log(chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension"  || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")));
       
+      if (chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension") || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")) {
+        // The error isn't really an error - redirect to Testudo
+      } else {
+        // Real error. Add to output.
+        pagecodediv.innerText = 'Uh Oh! We ran into an error (' + chrome.runtime.lastError.message + ')...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so that we can fix this issue!';
+        pagecodediv.innerText += '<br/><br/>';
+      }
+      
+      pagecodediv.innerHTML += "Please make sure you're on the Testudo Show Schedule page as shown below:";
+      pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
       document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
       document.getElementById('testudo-link-button').addEventListener('click', function() {
         goToTestudo();
