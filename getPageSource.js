@@ -104,7 +104,7 @@ function DOMtoString(document_root) {
           var firstLine = line.split(" ");
           courseTitle = firstLine[0] + " " + firstLine[1];
           sectionCode = firstLine[2].substring(1,firstLine[2].length-1);
-        } else if (line == "Lec" || line == "Dis") {
+        } else if (line == "Lec" || line == "Dis" || line == "Lab") {
           if (courseLines[j+1] == "TBA") {  /* if time is TBA */
             // do nothing.
           } else {  // other info
