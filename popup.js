@@ -120,6 +120,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 
 function authenticate() {
+  window.close();
   alert('After authenticating, come back to this page and use the extension again! The "Allow Access" button will change to allow importing!');
   
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {

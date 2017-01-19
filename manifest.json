@@ -3,8 +3,8 @@
 
   "name": "UMD GCal Schedule Importer",
   "description": "Imports your UMD class schedule to Google Calendar. Created by Timothy Chen and Brandon Berry.",
-  "version": "1.7",
-  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAs+040iHS89Zz7qMFUa+9zDtaP+PV7vrOJ/Mfb0fXcXuaIvZxkcDQxIZQWBRysZpybM7r28UmaTUZ6AaKhv+46CXtgafaKBXkOFjMNHzve+b6ishGpFJaWMmkr9P55BXPUenwNnfjG7fOBsuoL+jYwuD5eScCZlb9Da4//9h5J8wjy0yzqWFvrxHkFkUazgo4Cf6mA0fEJvpFMylMukIPYmqvrjr8sqsnyejnOzYwXt3dXxkdzpCI+uw5CZIdB89rjZb6Aw5/QQdp3/ceofg+6dIZdWkZVCw8DjIaTxBiDpbQoBJrkwCXisKxQT3GE2+Nh2owRBN+toL8oUl14gyA7QIDAQAB",
+  "version": "1.9",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjqTTci+MnXYqsWFQOxjjOxDNycU7AXFy5B8oOTXPGyOXyfFPI0TD+63I6qiItNwvnbbq0z3mHDtLytT8vtSzz9nfRt/vQsesEIx9t+DO/Q1AbKtwC6+9QEkhGxwsRfcejsXsTsc4xVTzpoOdZYByWajDaD1a+BdpREn6lvco40Qs8S6t5cFSxFGtDLh7q0cbpRj0uZ1mTaMaJ1RAg6a+AoZENnOTdxAzlAR8QtZa5vW+8OelssmUdcLaG5jVDXZej923nm03+1x8hxKrO1t0jRa3g4XY6e+v//TngouBRRIm/80Z0qGnYlqgWg7H9TpYdy6/jEwKTZZ5zZwmA+YHQwIDAQAB",
   "browser_action": {
     "default_icon": "icons/icon19.png",
     "default_popup": "popup.html"
@@ -20,7 +20,7 @@
     "https://apis.google.com/*"
   ],
   "oauth2": {
-    "client_id": "373135660634-coceei1hk8q56j42sisdvoqbfrue4qsc.apps.googleusercontent.com",
+    "client_id": "365301800741-avqh9el220genjif5gopcig3kdf8cinj.apps.googleusercontent.com",
     "scopes": [
       "https://www.googleapis.com/auth/calendar"
     ]
