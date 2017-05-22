@@ -1,20 +1,81 @@
 // @author Rob W <http://stackoverflow.com/users/938089/rob-w>
 // Demo: var serialized_html = DOMtoString(document);
 
-function getSemesterFirstDay() {
+function getSemesterFirstDay(viewedSemester) {
   // TODO dynamically get this using web scraping from https://www.provost.umd.edu/calendar/16.cfm
-  return new Date ("January 25, 2017");
+  // return new Date ("August 28, 2017");
+  
+  console.log("Retrieving Semester Start Date");
+  
+  var xhr = new XMLHttpRequest();
+  var year = viewedSemester.slice(-2);
+  var url = "https://www.provost.umd.edu/calendar/" + year + ".html";
+  xhr.open("GET", url, false);
+  xhr.send();
+
+  var htmlText = xhr.responseText;
+  var tablesHTML = htmlText.getElementsByClassName("table");
+  
+  var semesterDates;
+  if (viewedSemester.includes("Fall")) {
+    // get first table in the htmlText
+    semesterDates = tablesHTML[0].getElementsByClassName("table")[0].firstElementChild.getElementsByTagName("tr");
+    for (var i = 0; i < semesterDates.length; i++) {
+      if (semesterDates[i].firstElementChild.innerHTML == "First Day of Classes") {
+        return semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+      }
+    }
+  } else if (viewedSemester.includes("Spring")) {
+    // get third table in the htmlText
+    semesterDates = tablesHTML[2].getElementsByClassName("table")[0].firstElementChild.getElementsByTagName("tr");
+    for (var i = 0; i < semesterDates.length; i++) {
+      if (semesterDates[i].firstElementChild.innerHTML == "First Day of Classes") {
+        return semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+      }
+    }
+  }
 }
 
-function getSemesterLastDay() {
+function getSemesterLastDay(viewedSemester) {
   // TODO dynamically get this using web scraping from https://www.provost.umd.edu/calendar/16.cfm
-  return new Date ("May 11, 2017");
+  // return new Date ("December 11, 2017");
+  
+  console.log("Retrieving Semester End Date");
+  
+  var xhr = new XMLHttpRequest();
+  var year = viewedSemester.slice(-2);
+  var url = "https://www.provost.umd.edu/calendar/" + year + ".html";
+  xhr.open("GET", url, false);
+  xhr.send();
+
+  var htmlText = xhr.responseText;
+  var tablesHTML = htmlText.getElementsByClassName("table");
+  
+  var semesterDates;
+  if (viewedSemester.includes("Fall")) {
+    // get first table in the htmlText
+    semesterDates = tablesHTML[0].getElementsByClassName("table")[0].firstElementChild.getElementsByTagName("tr");
+    for (var i = 0; i < semesterDates.length; i++) {
+      if (semesterDates[i].firstElementChild.innerHTML == "Last Day of Classes") {
+        return semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+      }
+    }
+  } else if (viewedSemester.includes("Spring")) {
+    // get third table in the htmlText
+    semesterDates = tablesHTML[2].getElementsByClassName("table")[0].firstElementChild.getElementsByTagName("tr");
+    for (var i = 0; i < semesterDates.length; i++) {
+      if (semesterDates[i].firstElementChild.innerHTML == "Last Day of Classes") {
+        return semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+      }
+    }
+  }
 }
 
 function DOMtoString(document_root) {
     var html = '',
         ccontainers = document_root.getElementsByClassName("course-card-container--info"),
-        courseEventInfo = new Array();
+        courseEventInfo = new Array(),
+        viewedSemester = document_root.getElementsByClassName("schedule-print-header")[0].innerHTML.substring(19);
     if (ccontainers.length == 0) {
         html = "Please navigate to the Testudo Show Schedule page";
         validPage = false;
@@ -133,7 +194,7 @@ function DOMtoString(document_root) {
         endTime = timeLineInfo[3];
 
         // get semester start dates
-        semFirstDate = getSemesterFirstDay();
+        semFirstDate = getSemesterFirstDay(viewedSemester);
         semFirstDay = semFirstDate.getDay();
         //semEndDay = // TODO Need or don't need? Look at GCal API repeat requirements
 
@@ -206,7 +267,7 @@ function DOMtoString(document_root) {
     // console.log(courseEventInfo);
 
     // TODO also return the json or array holding courses
-    return [html, validPage, courseEventInfo,  getSemesterLastDay().toString()];
+    return [html, validPage, courseEventInfo,  getSemesterLastDay(viewedSemester).toString()];
 }
 
 chrome.runtime.sendMessage({
