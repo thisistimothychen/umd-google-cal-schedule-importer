@@ -3,7 +3,7 @@
 
   "name": "UMD GCal Schedule Importer",
   "description": "Imports your UMD class schedule to Google Calendar. Created by Timothy Chen and Brandon Berry.",
-  "version": "1.10",
+  "version": "2.0",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjqTTci+MnXYqsWFQOxjjOxDNycU7AXFy5B8oOTXPGyOXyfFPI0TD+63I6qiItNwvnbbq0z3mHDtLytT8vtSzz9nfRt/vQsesEIx9t+DO/Q1AbKtwC6+9QEkhGxwsRfcejsXsTsc4xVTzpoOdZYByWajDaD1a+BdpREn6lvco40Qs8S6t5cFSxFGtDLh7q0cbpRj0uZ1mTaMaJ1RAg6a+AoZENnOTdxAzlAR8QtZa5vW+8OelssmUdcLaG5jVDXZej923nm03+1x8hxKrO1t0jRa3g4XY6e+v//TngouBRRIm/80Z0qGnYlqgWg7H9TpYdy6/jEwKTZZ5zZwmA+YHQwIDAQAB",
   "browser_action": {
     "default_icon": "icons/icon19.png",
@@ -17,6 +17,7 @@
     "tabs",
     "identity",
     "<all_urls>",
+    "https://www.provost.umd.edu/calendar/*",
     "https://apis.google.com/*"
   ],
   "oauth2": {
