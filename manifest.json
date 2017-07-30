@@ -17,6 +17,7 @@
     "tabs",
     "identity",
     "<all_urls>",
+    "https://ajax.googleapis.com/*",
     "https://www.provost.umd.edu/calendar/*",
     "https://apis.google.com/*"
   ],

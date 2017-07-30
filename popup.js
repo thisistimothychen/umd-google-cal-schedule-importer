@@ -12,8 +12,9 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     //split the class up according to their containers
     var returnedData = request.source;
     var validPage = returnedData[1];
-    courseEventInfo = returnedData[2];
-    semEndDate = returnedData[3];
+    var courseEventInfo = returnedData[2];
+    var semEndDate = returnedData[3];
+    var viewedSemester = returnedData[4];
     
     // Sort courses by date
     courseEventInfo.sort(function(a, b) {
@@ -88,14 +89,14 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
             //       getTokenAndXhr);
     
             // Initiate GCal scheduling functionality
-            importSchedule();
+            importSchedule(courseEventInfo, viewedSemester, semEndDate);
           }, false);
         }
       });
     } else {
       // Commented code gets the URL of the current tab open.
       chrome.tabs.getSelected(null, function(tab) {
-        if (tab.url.includes("ntst.umd.edu")) {
+        if (tab.url.includes("ntst.umd.edu") && tab.url.includes("schedule")) {
           // In schedule system but not at schedule page yet
           pagecodediv.innerHTML = "You're almost there! Navigate to the show schedule page as shown below:";
           document.querySelector('#import-button').remove();
@@ -130,7 +131,7 @@ function authenticate() {
 }
 
 
-function importSchedule() {
+function importSchedule(courseEventInfo, viewedSemester, semEndDate) {
   document.querySelector('#import-button').className += " disabled";
   
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
@@ -140,7 +141,7 @@ function importSchedule() {
     // POST request to create a new calendar
     var url = "https://www.googleapis.com/calendar/v3/calendars";
     var params = {
-      "summary": "UMD Schedule",
+      "summary": viewedSemester + " UMD Schedule",
       "timeZone": "America/New_York"
     };
     var xhr = new XMLHttpRequest();
@@ -156,7 +157,7 @@ function importSchedule() {
             var newCalId = (JSON.parse(xhr.responseText).id);
             pagecodediv.innerText = 'Importing your schedule...';
             document.querySelector('#import-button').remove();
-            importEvents(newCalId, token);
+            importEvents(newCalId, token, courseEventInfo, semEndDate);
           } else {
             console.log("Error", xhr.statusText);
             pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
@@ -169,7 +170,7 @@ function importSchedule() {
   });
 }
 
-function importEvents(calId, token) {
+function importEvents(calId, token, courseEventInfo, semEndDate) {
   var semEndDateParam = new Date(semEndDate);
   semEndDateParam.setDate(semEndDateParam.getDate() + 1);
   semEndDateParamStr = semEndDateParam.toJSON().substr(0,4) + semEndDateParam.toJSON().substr(5,2) + semEndDateParam.toJSON().substr(8,2);
