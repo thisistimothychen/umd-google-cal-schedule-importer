@@ -1,5 +1,5 @@
 var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>'
-var authenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4">Allow Google Calendar Access</button>'
+var authenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4" style="letter-spacing: 0px;">Allow Google Calendar Access</button>'
 var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red accent-4">Take me to Testudo!</button>'
 
 
@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     var courseEventInfo = returnedData[2];
     var semEndDate = returnedData[3];
     var viewedSemester = returnedData[4];
-    
+
     // Sort courses by date
     courseEventInfo.sort(function(a, b) {
       return (new Date(a["startDate"]).getDay()) - (new Date(b["startDate"]).getDay());
@@ -62,32 +62,32 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
       chrome.identity.getAuthToken({}, function(token) {
         if (token==null) {
           // User hasn't authenticated in yet
-          pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!";
-          
+          pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!<br/><br/>After authenticating, come back to this page and use the extension again! The \"Allow Access\" button will change to allow importing!";
+
           document.querySelector('#button-div').innerHTML = authenticateButtonHTML;
           document.getElementById('authenticate-button').addEventListener('click', function() {
             console.log("authenticateButton has been clicked.");
             _gaq.push(['_trackEvent', 'authenticateButton', 'clicked']);
-    
+
             // Initiate GCal scheduling functionality
             authenticate();
           }, false);
         } else {
           // User has already authenticated; continue.
           pagecodediv.innerHTML = prettyOutput;
-          
+
           document.querySelector('#button-div').innerHTML = importButtonHTML;
-    
+
           // Add event listener for import schedule button
           var importScheduleButton = document.getElementById('import-button');
           importScheduleButton.addEventListener('click', function() {
             console.log("importScheduleButton has been clicked.");
             _gaq.push(['_trackEvent', 'importScheduleButton', 'clicked']);
-    
+
             // chrome.identity.removeCachedAuthToken(
             //       { 'token': access_token },
             //       getTokenAndXhr);
-    
+
             // Initiate GCal scheduling functionality
             importSchedule(courseEventInfo, viewedSemester, semEndDate);
           }, false);
@@ -100,16 +100,16 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
           // In schedule system but not at schedule page yet
           pagecodediv.innerHTML = "You're almost there! Navigate to the show schedule page as shown below:";
           document.querySelector('#import-button').remove();
-          
+
           pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
         } else {
           // Not at schedule system yet
           pagecodediv.innerHTML = 'Please navigate to the Testudo Show Schedule page as shown below:';
           pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
-          
+
           document.querySelector('#import-button').remove();
           document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
-          
+
           document.getElementById('testudo-link-button').addEventListener('click', function() {
             goToTestudo();
           });
@@ -122,8 +122,8 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
 function authenticate() {
   window.close();
-  alert('After authenticating, come back to this page and use the extension again! The "Allow Access" button will change to allow importing!');
-  
+  //alert('After authenticating, come back to this page and use the extension again! The "Allow Access" button will change to allow importing!');
+
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Check the token.
     console.log(token);
@@ -133,7 +133,7 @@ function authenticate() {
 
 function importSchedule(courseEventInfo, viewedSemester, semEndDate) {
   document.querySelector('#import-button').className += " disabled";
-  
+
   chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
     // Use the token.
     console.log(token);
@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
       console.log(chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension"  || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")));
-      
+
       if (chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension") || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")) {
         // The error isn't really an error - redirect to Testudo
       } else {
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pagecodediv.innerText = 'Uh Oh! We ran into an error (' + chrome.runtime.lastError.message + ')...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so that we can fix this issue!';
         pagecodediv.innerText += '<br/><br/>';
       }
-      
+
       pagecodediv.innerHTML += "Please make sure you're on the Testudo Show Schedule page as shown below:";
       pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
       document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
