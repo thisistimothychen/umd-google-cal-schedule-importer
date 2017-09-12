@@ -4,7 +4,7 @@ var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red acc
 
 
 function goToTestudo() {
-  chrome.tabs.create({url: "https://ntst.umd.edu/commonLogin?return-url=https%3A%2F%2Fntst.umd.edu%2Ftestudo%2Fmain%2FdropAdd"});
+  chrome.tabs.create({url: "https://ntst.umd.edu/testudo/main/schedule"});
 }
 
 chrome.runtime.onMessage.addListener(function(request, sender) {
