@@ -5,24 +5,26 @@ function getSemesterFirstAndLastDays(viewedSemester) {
     // console.log("Retrieving Semester Start and End Dates");
     var xhr = new XMLHttpRequest();
     var year = viewedSemester.slice(-2);
-    var url = "https://www.provost.umd.edu/calendar/" + year + ".html";
-    xhr.open("GET", url, false);
-    xhr.send(null);
-    
-    var htmlText = xhr.responseText;
-    var htmlObject = document.createElement('div');
-    htmlObject.innerHTML = htmlText;
-    var tablesHTML = htmlObject.getElementsByClassName("table");
-    
-    var semesterDates, tableIndex;
+
+    var year, semesterDates, tableIndex;
     if (viewedSemester.includes("Fall")) {
       // get first table in the htmlObject
       tableIndex = 0;
     } else if (viewedSemester.includes("Spring")) {
       // get third table in the htmlObject
       tableIndex = 2;
+      year -= 1;    // reduce year by 1 for correct lookup on provost.umd.edu
     }
-    
+
+    var url = "https://www.provost.umd.edu/calendar/" + year + ".html";
+    xhr.open("GET", url, false);
+    xhr.send(null);
+
+    var htmlText = xhr.responseText;
+    var htmlObject = document.createElement('div');
+    htmlObject.innerHTML = htmlText;
+    var tablesHTML = htmlObject.getElementsByClassName("table");
+
     var startDate, endDate;
     semesterDates = tablesHTML[tableIndex].firstElementChild.getElementsByTagName("tr");
     for (var i = 0; i < semesterDates.length; i++) {
