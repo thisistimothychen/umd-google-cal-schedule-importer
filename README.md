@@ -12,3 +12,20 @@ The final result:
 
 Notice to navigate to Testudo schedule page:
 ![Screenshot3](screenshots/ext_screenshot3.png)
+
+## Steps to Deploy to Chrome Extension Store
+
+- Update version number (should be done each push to GitHub anyways)
+- Remove the key from manifest.json (only used for testing purposes)
+- Package the following files into a zip:
+  - gCalFunctions.js
+  - getPageSource.js
+  - googleAnalytics.js
+  - googleApiClient.js
+  - icons
+  - manifest.json
+  - popup.html
+  - popup.js
+  - show-schedule-page-example.png
+  - style.css
+  
