@@ -6,17 +6,18 @@ function getSemesterFirstAndLastDays(viewedSemester) {
     var xhr = new XMLHttpRequest();
     var year = viewedSemester.slice(-2);
 
-    var year, semesterDates, tableIndex;
+    var urlYear, semesterDates, tableIndex;
     if (viewedSemester.includes("Fall")) {
       // get first table in the htmlObject
       tableIndex = 0;
+      urlYear = year;
     } else if (viewedSemester.includes("Spring")) {
       // get third table in the htmlObject
       tableIndex = 2;
-      year -= 1;    // reduce year by 1 for correct lookup on provost.umd.edu
+      urlYear = year - 1;    // reduce year by 1 for correct lookup on provost.umd.edu
     }
 
-    var url = "https://www.provost.umd.edu/calendar/" + year + ".html";
+    var url = "https://www.provost.umd.edu/calendar/" + urlYear + ".html";
     xhr.open("GET", url, false);
     xhr.send(null);
 
@@ -37,7 +38,7 @@ function getSemesterFirstAndLastDays(viewedSemester) {
         endDate = new Date(day + ", " + year);
       }
     }
-    
+
     return ({
       startDate: startDate,
       endDate: endDate
@@ -53,10 +54,10 @@ function DOMtoString(document_root) {
       validPage = false;
       return [html, validPage, courseEventInfo, null];
     }
-    
+
     var viewedSemester = document_root.getElementsByClassName("schedule-print-header")[0].innerHTML.substring(19);
     validPage = true;
-    
+
     const semesterFirstAndLastDays = getSemesterFirstAndLastDays(viewedSemester);
     const semFirstDate = semesterFirstAndLastDays.startDate;
     const semLastDate = semesterFirstAndLastDays.endDate;
