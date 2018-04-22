@@ -1,0 +1,30 @@
+{
+  "manifest_version": 2,
+  "name": "UMD GCal Schedule Importer",
+  "description": "Imports your UMD class schedule to Google Calendar. Created by Timothy Chen and Brandon Berry.",
+  "version": "2.5",
+  "key": "PRIVATE_KEY"
+  "browser_action": {
+    "default_icon": "icons/icon19.png",
+    "default_popup": "popup.html"
+  },
+  "icons": {  "16": "icons/icon16.png",
+              "48": "icons/icon48.png",
+              "128": "icons/icon128.png" },
+  "permissions": [
+    "activeTab",
+    "tabs",
+    "identity",
+    "<all_urls>",
+    "https://ajax.googleapis.com/*",
+    "https://www.provost.umd.edu/calendar/*",
+    "https://apis.google.com/*"
+  ],
+  "oauth2": {
+    "client_id": "365301800741-avqh9el220genjif5gopcig3kdf8cinj.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/calendar"
+    ]
+  },
+  "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://www.google-analytics.com https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en_US.i0xByvRGaww.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCPwTfAUzE6XMjHX2OFK5MEMNlittQ/cb=gapi.loaded_0 https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en.oKHdHV2xpm0.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCNd8FlX7D-ugulSNNOrsQOkuRZJKA/cb=gapi.loaded_0; object-src 'self'"
+}
