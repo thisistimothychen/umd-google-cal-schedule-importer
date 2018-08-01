@@ -1,0 +1,80 @@
+body {
+  /* background-color: #F5F5F5; */
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.container {
+  margin: 60px;
+}
+
+h1, h2 {
+  font-family: Oswald, "Roboto","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+  color: white;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-weight: 250;
+}
+
+p {
+  font-family: "Roboto","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+  font-weight: 400;
+  font-size: 1.25em;
+  color: white;
+  margin: 40px 0px;
+}
+
+#umd-logo {
+  width: 20em;
+}
+
+#chrome-store-btn {
+  width: 18em;
+}
+
+#text-container {
+  vertical-align: middle;
+  height: 100vh;
+  position: relative;
+}
+
+#text-content {
+  max-width: 25em;
+  margin: 0;
+  position: absolute;
+  top: 35%;
+  transform: translateY(-50%);
+}
+
+#triangle {
+  position: absolute;
+  z-index: -10;
+  background-color: #D8232E;
+  border-radius: 100px;
+  width: 150vw;
+  height: 150vh;
+  transform: translate(-121vw, -30vh) rotate(-25deg);
+}
+
+#computer {
+  width: 75%;
+  height: auto;
+  margin: auto;
+  position: absolute;
+  transform: translateX(12.5vw);
+}
+
+/* @media only screen and (max-width: 599px) {
+  #computer {
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+} */
+
+@media only screen and (min-width: 600px) {
+  #computer {
+    float: right;
+    overflow: auto;
+    margin: auto;
+    top: 0; bottom: 0; right: 0;
+  }
+}
