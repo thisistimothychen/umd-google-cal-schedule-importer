@@ -74,11 +74,10 @@ p {
 }
 
 #demo-screen {
-  width: 75%;
-  height: auto;
   margin: auto;
   position: absolute;
-  transform: translateX(12.5vw);
+  transform: translateX(30vw);
+  zoom: 108%;
 }
 
 #screengrab {
@@ -134,12 +133,17 @@ p {
     transform: translate(-100vw, -120vh) rotate(-60deg);
   }
 
+  #text-container {
+    text-align: center;
+  }
+
   #text-content {
-    max-width: 100%;
     padding-top: 4em;
     top: 0%;
     transform: translateY(0);
-    text-align: center;
+    max-width: 400px;
+    margin: auto;
+    position: relative;
   }
 
   #demo-screen {
