@@ -73,12 +73,28 @@ p {
   transform: translate(-121vw, -30vh) rotate(-25deg);
 }
 
-#computer {
+#demo-screen {
   width: 75%;
   height: auto;
   margin: auto;
   position: absolute;
   transform: translateX(12.5vw);
+}
+
+#screengrab {
+  width: 915px;
+  position: absolute;
+  z-index: 1;
+  bottom: 200px;
+  left: 145px;
+  overflow: hidden;
+  float: right;
+}
+
+#computer {
+  position: absolute;
+  z-index: 2;
+  bottom: 120px;
 }
 
 @media only screen and (max-width: 1390px) {
@@ -103,10 +119,13 @@ p {
   }
 }
 
-@media only screen and (max-width: 599px) {
+@media only screen and (max-width: 800px) {
+  #nav {
+    display: none;
+  }
+
   .container {
     margin: 10px 20px;
-    text-align: center;
   }
 
   #triangle {
@@ -120,15 +139,32 @@ p {
     padding-top: 4em;
     top: 0%;
     transform: translateY(0);
+    text-align: center;
+  }
+
+  #demo-screen {
+    position: absolute;
+    float: left;
+    overflow: visible;
+    margin: auto;
+    left: -22em;
+    zoom: 60%;
+  }
+
+  #screengrab {
+    width: 915px;
+    position: absolute;
+    z-index: 1;
+    bottom: 200px;
+    left: 145px;
+    overflow: hidden;
+    float: right;
   }
 
   #computer {
     position: absolute;
-    float: left;
-    overflow: auto;
-    margin: auto;
-    bottom: 50px; left: -150px;
-    width: 105%;
+    z-index: 2;
+    bottom: 120px;
   }
 
   h1, h2 {
@@ -140,14 +176,5 @@ p {
   p {
     font-size: 1.1em;
     margin: 10px 0px 25px 0px;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  #computer {
-    float: right;
-    overflow: auto;
-    margin: auto;
-    top: 0; bottom: 0; right: 0;
   }
 }
