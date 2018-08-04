@@ -1,11 +1,28 @@
 body {
-  /* background-color: #F5F5F5; */
   overflow-x: hidden;
   overflow-y: hidden;
 }
 
 .container {
-  margin: 60px;
+  margin: 45px 60px;
+}
+
+#nav {
+  display: inline;
+}
+
+div.link {
+  position: relative;
+  z-index: 10;
+  display: inline;
+  padding: 0px 20px;
+  float: right;
+  font-family: "Roboto","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+}
+
+a {
+  color: #D8232E;
+  text-decoration: none;
 }
 
 h1, h2 {
@@ -42,7 +59,7 @@ p {
   max-width: 25em;
   margin: 0;
   position: absolute;
-  top: 35%;
+  top: 38%;
   transform: translateY(-50%);
 }
 
@@ -64,11 +81,67 @@ p {
   transform: translateX(12.5vw);
 }
 
-/* @media only screen and (max-width: 599px) {
-  #computer {
-    top: 0; left: 0; bottom: 0; right: 0;
+@media only screen and (max-width: 1390px) {
+  /* body {
+    background-color: green;
+  } */
+
+  #triangle {
+    width: 150vw;
+    height: 150vh;
+    transform: translate(-115vw, -40vh) rotate(-25deg);
   }
-} */
+}
+
+@media only screen and (max-width: 400px) {
+  #umd-logo {
+    margin-top: -30px;
+  }
+
+  #chrome-store-btn {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .container {
+    margin: 10px 20px;
+    text-align: center;
+  }
+
+  #triangle {
+    width: 400vw;
+    height: 100vh;
+    transform: translate(-100vw, -120vh) rotate(-60deg);
+  }
+
+  #text-content {
+    max-width: 100%;
+    padding-top: 4em;
+    top: 0%;
+    transform: translateY(0);
+  }
+
+  #computer {
+    position: absolute;
+    float: left;
+    overflow: auto;
+    margin: auto;
+    bottom: 50px; left: -150px;
+    width: 105%;
+  }
+
+  h1, h2 {
+    line-height: 1.2;
+    font-weight: 250;
+    margin-bottom: 0px;
+  }
+
+  p {
+    font-size: 1.1em;
+    margin: 10px 0px 25px 0px;
+  }
+}
 
 @media only screen and (min-width: 600px) {
   #computer {
