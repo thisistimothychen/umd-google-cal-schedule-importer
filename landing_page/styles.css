@@ -120,7 +120,7 @@ p {
   #triangle {
     width: 400vw;
     height: 100vh;
-    transform: translate(-100vw, -120vh) rotate(-60deg);
+    transform: translate(-100vw, -110vh) rotate(-60deg);
   }
 
   #text-container {
@@ -172,6 +172,7 @@ p {
   }
 }
 
+/* iPhone 7 Plus */
 @media only screen and (max-width: 600px) {
   #nav {
     display: none;
@@ -181,15 +182,52 @@ p {
     margin-top: -50px;
   }
 
-  #chrome-store-btn {
-    width: 200px;
-    margin-top: -15px;
-  }
-
   #demo-screen {
     position: absolute;
     bottom: -2em;
     float: left;
     zoom: 45% !important;
+  }
+}
+
+/* iPhone 7 */
+@media only screen and (max-width: 400px) {
+  #chrome-store-btn {
+    width: 230px;
+    margin-top: 20px;
+  }
+
+  p {
+    display: none;
+  }
+}
+
+/* iPhone 5 */
+@media only screen and (max-width: 375px) {
+  .container {
+    margin: 0px;
+  }
+
+  #umd-logo {
+    width: 80%;
+  }
+
+  h1 {
+    font-size: 1.4em;
+  }
+
+  #chrome-store-btn {
+    width: 150px;
+    margin-top: 10px;
+  }
+
+  p {
+    display: none;
+  }
+
+  #demo-screen {
+    bottom: -2em;
+    float: left;
+    left: -500px !important;
   }
 }
