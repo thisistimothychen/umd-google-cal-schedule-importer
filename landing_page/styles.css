@@ -149,7 +149,6 @@ p {
   #demo-screen {
     position: absolute;
     float: left;
-    overflow: visible;
     margin: auto;
     left: -22em;
     zoom: 60%;
