@@ -108,16 +108,6 @@ p {
   }
 }
 
-@media only screen and (max-width: 400px) {
-  #umd-logo {
-    margin-top: -30px;
-  }
-
-  #chrome-store-btn {
-    display: none;
-  }
-}
-
 @media only screen and (max-width: 800px) {
   #nav {
     display: none;
@@ -179,5 +169,27 @@ p {
   p {
     font-size: 1.1em;
     margin: 10px 0px 25px 0px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  #nav {
+    display: none;
+  }
+
+  #umd-logo {
+    margin-top: -50px;
+  }
+
+  #chrome-store-btn {
+    width: 200px;
+    margin-top: -15px;
+  }
+
+  #demo-screen {
+    position: absolute;
+    bottom: -2em;
+    float: left;
+    zoom: 45% !important;
   }
 }
