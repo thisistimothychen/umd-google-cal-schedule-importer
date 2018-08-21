@@ -1,3 +1,8 @@
+body {
+  overflow: hidden;
+  position: fixed;
+}
+
 .site-body {
   overflow-x: hidden !important;
   overflow-y: hidden !important;
@@ -9,6 +14,10 @@
 
 #nav {
   display: inline;
+}
+
+#nav-container {
+  width: 90vw;
 }
 
 div.link {
