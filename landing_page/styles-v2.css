@@ -133,6 +133,7 @@ h1 {
   }
 
   #demo-gif {
-    transform: translateX(62px) translateY(-288px);
+    /* transform: translateX(62px) translateY(-288px); */
+    transform: translateX(-458px) translateY(17px);
   }
 }
