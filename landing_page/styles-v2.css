@@ -1,0 +1,139 @@
+body {
+  font-family: "Roboto","Helvetica Neue","Helvetica",Helvetica,Arial,sans-serif;
+  font-weight: 200;
+  font-size: 1.25em;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#triangle {
+  position: absolute;
+  z-index: -10;
+  background-color: #D8232E;
+  border-radius: 100px;
+  width: 850px;
+  height: 850px;
+  transform: translate(-325px, -50px) rotate(-25deg);
+  overflow: hidden;
+}
+
+/* Text Container */
+#text-container {
+  margin-left: 5%;
+  margin-bottom: 100px;
+}
+
+h1, p {
+  color: white;
+}
+
+h1 {
+  font-family: Oswald, "Roboto", "Helvetica Neue", "Helvetica", Helvetica, sans-serif;
+  line-height: 1.2;
+  text-transform: uppercase;
+  font-weight: 200;
+}
+
+#umd-logo {
+  width: 325px;
+}
+
+.text {
+  width: 375px;
+}
+
+#chrome-store-btn {
+  width: 275px;
+}
+
+/* Laptop monitor */
+#laptop {
+  overflow: hidden;
+  zoom: 108%;
+  position: relative;
+  width: auto;
+  height: 700px;
+}
+
+#demo-gif {
+  position: absolute;
+  height: 83%;
+  z-index: 1;
+  transform: translateX(148px) translateY(-666px);
+}
+
+#screen {
+  position: relative;
+  height: 100%;
+  z-index: 2;
+}
+
+@media screen and (min-height: 750px) {
+  /* Disable vertical scroll if the laptop fully fits */
+  body {
+    overflow: hidden;
+  }
+}
+
+@media screen and (max-width: 1350px) {
+  /* Shift laptop left if too overflowed*/
+  #laptop {
+    margin-left: -75px;
+  }
+}
+
+@media screen and (min-width: 1050px) and (max-width: 1275px) {
+  /* Shrink laptop left if still too overflowed */
+  #laptop {
+    height: 500px;
+    margin-left: -45px;
+  }
+
+  #demo-gif {
+    transform: translateX(105px) translateY(-477px);
+  }
+}
+
+@media screen and (max-width: 1050px), (max-height: 750px) {
+  /* Swap to vertical mode */
+  body {
+    background: blue;
+    overflow: visible;
+  }
+
+  #triangle {
+    width: 1250px;
+    height: 1250px;
+    transform: translate(-275px, -900px) rotate(-61deg);
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  #text-container {
+    margin-left: 0%;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  /* Laptop monitor */
+  #laptop {
+    position: relative;
+    height: 300px;
+  }
+
+  #demo-gif {
+    transform: translateX(62px) translateY(-288px);
+  }
+}
