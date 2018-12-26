@@ -102,16 +102,14 @@ h1 {
 /* Swap to vertical mode */
 @media screen and (max-width: 1050px), (max-height: 750px) {
   body {
-    overflow: visible;
-    overflow-y: hidden;
+    overflow-x: hidden;
   }
 
   #triangle {
     width: 1250px;
     height: 1250px;
-    position: fixed;
     left: 40%;
-    transform: translate(-50%, -70%) rotate(-55deg);
+    transform: translate(-50%, -80%) rotate(-55deg);
   }
 
   .container {
@@ -120,7 +118,6 @@ h1 {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden;
   }
 
   #text-container {
