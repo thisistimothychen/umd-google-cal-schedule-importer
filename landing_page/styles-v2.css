@@ -25,8 +25,7 @@ body {
 
 /* Text Container */
 #text-container {
-  margin-left: 5%;
-  margin-bottom: 100px;
+  margin: 0 0 100px 5%;
 }
 
 h1, p {
@@ -100,17 +99,19 @@ h1 {
   }
 }
 
+/* Swap to vertical mode */
 @media screen and (max-width: 1050px), (max-height: 750px) {
-  /* Swap to vertical mode */
   body {
-    background: blue;
     overflow: visible;
+    overflow-y: hidden;
   }
 
   #triangle {
     width: 1250px;
     height: 1250px;
-    transform: translate(-275px, -900px) rotate(-61deg);
+    position: fixed;
+    left: 40%;
+    transform: translate(-50%, -70%) rotate(-55deg);
   }
 
   .container {
@@ -119,11 +120,11 @@ h1 {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    overflow: hidden;
   }
 
   #text-container {
-    margin-left: 0%;
-    margin-top: 20px;
+    margin: 20px 0 5% 0;
     text-align: center;
   }
 
@@ -131,6 +132,7 @@ h1 {
   #laptop {
     position: relative;
     height: 300px;
+    margin-left: 0px;
   }
 
   #demo-gif {
