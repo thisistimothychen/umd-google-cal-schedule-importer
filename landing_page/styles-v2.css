@@ -50,6 +50,9 @@ h1 {
 #chrome-store-btn {
   width: 275px;
 }
+#chrome-store-btn:hover {
+  filter: brightness(120%);
+}
 
 /* Laptop monitor */
 #laptop {
