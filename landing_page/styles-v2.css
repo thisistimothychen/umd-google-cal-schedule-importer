@@ -54,6 +54,12 @@ h1 {
   filter: brightness(120%);
 }
 
+#privacy-link {
+  color: white;
+  font-size: 0.75em;
+  text-decoration: none;
+}
+
 /* Laptop monitor */
 #laptop {
   overflow: hidden;
