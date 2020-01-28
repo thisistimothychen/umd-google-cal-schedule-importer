@@ -17,7 +17,7 @@ Notice to navigate to Testudo schedule page:
 
 - Update version number (should be done each push to GitHub anyways)
 - Remove the key from manifest.json (only used for testing purposes)
-- Package the following files into a zip:
+- Package the following files into a zip (all files are in the /extension directory):
   - gCalFunctions.js
   - getPageSource.js
   - googleAnalytics.js
