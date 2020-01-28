@@ -23,10 +23,10 @@ Notice to navigate to Testudo schedule page:
   - googleAnalytics.js
   - googleApiClient.js
   - icons
+  - ics.deps.min.js
+  - ics.js
   - manifest.json
   - popup.html
   - popup.js
-  - ics.js
-  - ics.deps.min.js
   - show-schedule-page-example.png
   - style.css
