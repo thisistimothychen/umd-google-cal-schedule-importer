@@ -1,7 +1,11 @@
-var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>'
-var authenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4" style="letter-spacing: 0px;">Allow Google Calendar Access</button>'
-var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red accent-4">Take me to Testudo!</button>'
+/** Whether or not the export flow should be prioritized in the UI. */
+const USE_ICS_EXPORT = true;
 
+var importButtonHTML = '<button id="import-button" class="btn red accent-4">Import Schedule</button>';
+var authenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4" style="letter-spacing: 0px;">Allow Google Calendar Access</button>';
+var disabledAuthenticateButtonHTML = '<button id="authenticate-button" class="btn red accent-4" style="margin: 5px 0; letter-spacing: 0px;" disabled>Allow Google Calendar Access</button>';
+var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red accent-4">Take me to Testudo!</button>';
+var exportToIcsButtonHTML = '<button id="export-ics-button" class="btn red accent-4" style="margin: 5px 0;letter-spacing: 0px;">Export schedule to .ics format</button>';
 
 function goToTestudo() {
   chrome.tabs.create({
@@ -63,19 +67,37 @@ chrome.runtime.onMessage.addListener(function (request, sender) {
     if (validPage) { // If page has needed elements
       chrome.identity.getAuthToken({}, function (token) {
         if (token == null) {
-          // User hasn't authenticated in yet
-          pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!<br/><br/>After authenticating, come back to this page and use the extension again! The \"Allow Access\" button will change to allow importing!";
+          const authBtnEl = document.querySelector('#button-div');
 
-          document.querySelector('#button-div').innerHTML = authenticateButtonHTML;
-          document.getElementById('authenticate-button').addEventListener('click', function () {
-            console.log("authenticateButton has been clicked.");
-            _gaq.push(['_trackEvent', 'authenticateButton', 'clicked']);
+          // Prioritize the .ics export option over direct GCal import.
+          if (USE_ICS_EXPORT) {
+            // Show the disabled auth button and show a informational message.
+            pagecodediv.innerHTML = "You've come to the correct page! Unfortunately, our direct import feature is currently unavailable (<a href='https://www.reddit.com/r/UMD/comments/esil73/get_your_class_schedule_in_google_calendar/ffe9blo'>more information</a>).";
+            pagecodediv.innerHTML += "<br/><br/>";
+            pagecodediv.innerHTML += "In the meantime, you can export your schedule as a .ics file and <a href='https://calendar.google.com/calendar/r/settings/export'>upload it to Google Calendar yourself</a>! Make sure to create a new empty calendar to upload to if you prefer your course schedule in its own separate calendar.";
+            authBtnEl.innerHTML = disabledAuthenticateButtonHTML + exportToIcsButtonHTML;
 
-            // Initiate GCal scheduling functionality
-            authenticate();
-          }, false);
-        } else {
-          // User has already authenticated; continue.
+            document.getElementById('export-ics-button').addEventListener('click', function () {
+              console.log("export to ics has been clicked.");
+              _gaq.push(['_trackEvent', 'exportToIcsButton', 'clicked']);
+
+              // Export schedule to .ics file.
+              exportScheduleToIcs(courseEventInfo, viewedSemester, semEndDate);
+            }, false);
+          } else {
+            // User hasn't authenticated in yet
+            pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!<br/><br/>After authenticating, come back to this page and use the extension again! The \"Allow Access\" button will change to allow importing!";
+            authBtnEl.innerHTML = authenticateButtonHTML;
+
+            document.getElementById('authenticate-button').addEventListener('click', function () {
+              console.log("authenticateButton has been clicked.");
+              _gaq.push(['_trackEvent', 'authenticateButton', 'clicked']);
+
+              // Initiate GCal scheduling functionality
+              authenticate();
+            }, false);
+          }
+        } else { // User has already authenticated; continue.
           pagecodediv.innerHTML = prettyOutput;
 
           document.querySelector('#button-div').innerHTML = importButtonHTML;
@@ -243,8 +265,49 @@ function postImportActions() {
   window.open('https://calendar.google.com/calendar/render#main_7%7Cmonth', '_blank');
 }
 
+/**
+ * Similar to #importEvents, but instead of POSTing to Google Calendar, writes to an .ics file
+ * @param {*} courseEventInfo
+ * @param {*} viewedSemeseter
+ * @param {*} semEndDate
+ */
+function exportScheduleToIcs(courseEventInfo, viewedSemester, semEndDate) {
+  // Initialize ics.js
+  var cal = ics();
 
+  var semEndDateParam = new Date(semEndDate);
+  semEndDateParam.setDate(semEndDateParam.getDate() + 1);
 
+  rrule = {
+    freq: 'WEEKLY',
+    until: semEndDateParam.toJSON(),
+    // TODO: consider using byday property to only store each course as one event.
+  };
+
+  for (var i = 0; i < courseEventInfo.length; i++) {
+    var course = courseEventInfo[i];
+
+    // Set start/end dates taking into consideration am/pm
+    var startDate = (new Date(course.startDate))
+    if (course.startPmAm == "pm" && parseInt(startDate.getHours()) < 12) {
+      startDate.setHours(startDate.getHours() + 12);
+    }
+    var endDate = (new Date(course.endDate))
+    if (course.endPmAm == "pm" && parseInt(endDate.getHours()) < 12) {
+      endDate.setHours(endDate.getHours() + 12);
+    }
+
+    const summary = course.courseTitle + " (" + course.classType + ")";
+    const description = "Section " + course.section;
+    const location = course.location;
+    const begin = startDate.toJSON();
+    const end = endDate.toJSON();
+    cal.addEvent(summary, description, location, begin, end, rrule)
+  }
+
+  const filename = viewedSemester;
+  cal.download(filename);
+}
 
 function onWindowLoad() {
   // TODO onWindowLoad stuff -- do we need it?
