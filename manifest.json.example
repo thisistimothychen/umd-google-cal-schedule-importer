@@ -21,7 +21,7 @@
     "https://apis.google.com/*"
   ],
   "oauth2": {
-    "client_id": "TODO ENTER apps.googleusercontent.com KEY HERE",
+    "client_id": "TODO ENTER apps.googleusercontent.com KEY HERE (from https://console.developers.google.com/apis/credentials)",
     "scopes": [
       "https://www.googleapis.com/auth/calendar"
     ]

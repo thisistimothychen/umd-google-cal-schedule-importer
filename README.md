@@ -26,6 +26,7 @@ Notice to navigate to Testudo schedule page:
   - manifest.json
   - popup.html
   - popup.js
+  - ics.js
+  - ics.deps.min.js
   - show-schedule-page-example.png
   - style.css
-  
