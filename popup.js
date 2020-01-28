@@ -4,10 +4,12 @@ var testudoLinkButtonHTML = '<button id="testudo-link-button" class="btn red acc
 
 
 function goToTestudo() {
-  chrome.tabs.create({url: "https://ntst.umd.edu/testudo/main/schedule"});
+  chrome.tabs.create({
+    url: "https://ntst.umd.edu/testudo/main/schedule"
+  });
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender) {
+chrome.runtime.onMessage.addListener(function (request, sender) {
   if (request.action == "getSource") {
     //split the class up according to their containers
     var returnedData = request.source;
@@ -17,14 +19,14 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     var viewedSemester = returnedData[4];
 
     // Sort courses by date
-    courseEventInfo.sort(function(a, b) {
+    courseEventInfo.sort(function (a, b) {
       return (new Date(a["startDate"]).getDay()) - (new Date(b["startDate"]).getDay());
     });
 
     // Get output in terms of plain text from scraping
     var containers = returnedData[0].split("END");
     var scheduleTextFromPage = "";
-    for(i = 0 ; i < containers.length ; i++){
+    for (i = 0; i < containers.length; i++) {
       scheduleTextFromPage += containers[i] + "\n";
     }
     //pagecodediv.innerText = scheduleTextFromPage;
@@ -58,14 +60,14 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
     }
 
 
-    if (validPage) {    // If page has needed elements
-      chrome.identity.getAuthToken({}, function(token) {
-        if (token==null) {
+    if (validPage) { // If page has needed elements
+      chrome.identity.getAuthToken({}, function (token) {
+        if (token == null) {
           // User hasn't authenticated in yet
           pagecodediv.innerHTML = "You've come to the correct page! Please authorize this chrome extension to import your schedule!<br/><br/>After authenticating, come back to this page and use the extension again! The \"Allow Access\" button will change to allow importing!";
 
           document.querySelector('#button-div').innerHTML = authenticateButtonHTML;
-          document.getElementById('authenticate-button').addEventListener('click', function() {
+          document.getElementById('authenticate-button').addEventListener('click', function () {
             console.log("authenticateButton has been clicked.");
             _gaq.push(['_trackEvent', 'authenticateButton', 'clicked']);
 
@@ -80,7 +82,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
 
           // Add event listener for import schedule button
           var importScheduleButton = document.getElementById('import-button');
-          importScheduleButton.addEventListener('click', function() {
+          importScheduleButton.addEventListener('click', function () {
             console.log("importScheduleButton has been clicked.");
             _gaq.push(['_trackEvent', 'importScheduleButton', 'clicked']);
 
@@ -95,7 +97,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
       });
     } else {
       // Commented code gets the URL of the current tab open.
-      chrome.tabs.getSelected(null, function(tab) {
+      chrome.tabs.getSelected(null, function (tab) {
         if (tab.url.includes("ntst.umd.edu") && tab.url.includes("schedule")) {
           // In schedule system but not at schedule page yet
           pagecodediv.innerHTML = "You're almost there! Navigate to the show schedule page as shown below:";
@@ -110,7 +112,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
           document.querySelector('#import-button').remove();
           document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
 
-          document.getElementById('testudo-link-button').addEventListener('click', function() {
+          document.getElementById('testudo-link-button').addEventListener('click', function () {
             goToTestudo();
           });
         }
@@ -124,7 +126,9 @@ function authenticate() {
   window.close();
   //alert('After authenticating, come back to this page and use the extension again! The "Allow Access" button will change to allow importing!');
 
-  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+  chrome.identity.getAuthToken({
+    'interactive': true
+  }, function (token) {
     // Check the token.
     console.log(token);
   });
@@ -134,7 +138,9 @@ function authenticate() {
 function importSchedule(courseEventInfo, viewedSemester, semEndDate) {
   document.querySelector('#import-button').className += " disabled";
 
-  chrome.identity.getAuthToken({ 'interactive': true }, function(token) {
+  chrome.identity.getAuthToken({
+    'interactive': true
+  }, function (token) {
     // Use the token.
     console.log(token);
 
@@ -151,19 +157,19 @@ function importSchedule(courseEventInfo, viewedSemester, semEndDate) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            var newCalId = (JSON.parse(xhr.responseText).id);
-            pagecodediv.innerText = 'Importing your schedule...';
-            document.querySelector('#import-button').remove();
-            importEvents(newCalId, token, courseEventInfo, semEndDate);
-          } else {
-            console.log("Error", xhr.statusText);
-            pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
-            document.querySelector('#import-button').remove();
-          }
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var newCalId = (JSON.parse(xhr.responseText).id);
+          pagecodediv.innerText = 'Importing your schedule...';
+          document.querySelector('#import-button').remove();
+          importEvents(newCalId, token, courseEventInfo, semEndDate);
+        } else {
+          console.log("Error", xhr.statusText);
+          pagecodediv.innerText = 'Uh Oh! Something went wrong...Sorry about the inconvenience! Feel free to shoot tchen112@terpmail.umd.edu an email so we know we\'re down!';
+          document.querySelector('#import-button').remove();
         }
+      }
     }
 
     xhr.send(JSON.stringify(params));
@@ -173,7 +179,7 @@ function importSchedule(courseEventInfo, viewedSemester, semEndDate) {
 function importEvents(calId, token, courseEventInfo, semEndDate) {
   var semEndDateParam = new Date(semEndDate);
   semEndDateParam.setDate(semEndDateParam.getDate() + 1);
-  semEndDateParamStr = semEndDateParam.toJSON().substr(0,4) + semEndDateParam.toJSON().substr(5,2) + semEndDateParam.toJSON().substr(8,2);
+  semEndDateParamStr = semEndDateParam.toJSON().substr(0, 4) + semEndDateParam.toJSON().substr(5, 2) + semEndDateParam.toJSON().substr(8, 2);
   var postImportActionsCalled = false;
 
   for (var i = 0; i < courseEventInfo.length; i++) {
@@ -185,11 +191,11 @@ function importEvents(calId, token, courseEventInfo, semEndDate) {
     // Set start/end dates taking into consideration am/pm
     var startDate = (new Date(course.startDate))
     if (course.startPmAm == "pm" && parseInt(startDate.getHours()) < 12) {
-      startDate.setHours(startDate.getHours()+12);
+      startDate.setHours(startDate.getHours() + 12);
     }
     var endDate = (new Date(course.endDate))
     if (course.endPmAm == "pm" && parseInt(endDate.getHours()) < 12) {
-      endDate.setHours(endDate.getHours()+12);
+      endDate.setHours(endDate.getHours() + 12);
     }
 
     var params = {
@@ -216,12 +222,12 @@ function importEvents(calId, token, courseEventInfo, semEndDate) {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.setRequestHeader('Authorization', 'Bearer ' + token);
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState == XMLHttpRequest.DONE && !postImportActionsCalled) {
-            // console.log(JSON.parse(xhr.responseText));
-            postImportActions();
-            postImportActionsCalled = true;
-        }
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == XMLHttpRequest.DONE && !postImportActionsCalled) {
+        // console.log(JSON.parse(xhr.responseText));
+        postImportActions();
+        postImportActionsCalled = true;
+      }
     }
 
     xhr.send(JSON.stringify(params));
@@ -234,7 +240,7 @@ function postImportActions() {
   console.log(pagecodediv);
   // pagecodediv.innerText = 'Completed schedule import.';
 
-  window.open('https://calendar.google.com/calendar/render#main_7%7Cmonth','_blank');
+  window.open('https://calendar.google.com/calendar/render#main_7%7Cmonth', '_blank');
 }
 
 
@@ -244,15 +250,15 @@ function onWindowLoad() {
   // TODO onWindowLoad stuff -- do we need it?
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // get page HTML
   var pagecodediv = document.querySelector('#pagecodediv');
   chrome.tabs.executeScript(null, {
     file: "getPageSource.js"
-  }, function() {
+  }, function () {
     // If you try and inject into an extensions page or the webstore/NTP you'll get an error
     if (chrome.runtime.lastError) {
-      console.log(chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension"  || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")));
+      console.log(chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension" || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")));
 
       if (chrome.runtime.lastError.message.includes("The extensions gallery cannot be scripted") || chrome.runtime.lastError.message.includes("Cannot access a chrome-extension:// URL of different extension") || chrome.runtime.lastError.message.includes("Cannot access a chrome:// URL")) {
         // The error isn't really an error - redirect to Testudo
@@ -265,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
       pagecodediv.innerHTML += "Please make sure you're on the Testudo Show Schedule page as shown below:";
       pagecodediv.innerHTML += '<br/><br/><img src="show-schedule-page-example.png" style="max-width:100%">';
       document.querySelector('#button-div').innerHTML = testudoLinkButtonHTML;
-      document.getElementById('testudo-link-button').addEventListener('click', function() {
+      document.getElementById('testudo-link-button').addEventListener('click', function () {
         goToTestudo();
       });
     }
