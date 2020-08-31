@@ -1,9 +1,8 @@
 // @author Rob W <http://stackoverflow.com/users/938089/rob-w>
 // Demo: var serialized_html = DOMtoString(document);
 
-function getSemesterFirstAndLastDays(viewedSemester) {
+function getSemesterFirstAndLastDays(viewedSemester, htmlText) {
     // console.log("Retrieving Semester Start and End Dates");
-    var xhr = new XMLHttpRequest();
     var year = viewedSemester.slice(-2);
 
     var urlYear, semesterDates, tableIndex;
@@ -17,24 +16,19 @@ function getSemesterFirstAndLastDays(viewedSemester) {
       urlYear = year - 1;    // reduce year by 1 for correct lookup on provost.umd.edu
     }
 
-    var url = "https://www.provost.umd.edu/calendar/" + urlYear + ".html";
-    xhr.open("GET", url, false);
-    xhr.send(null);
-
-    var htmlText = xhr.responseText;
     var htmlObject = document.createElement('div');
     htmlObject.innerHTML = htmlText;
     var tablesHTML = htmlObject.getElementsByClassName("table");
 
     var startDate, endDate;
-    semesterDates = tablesHTML[tableIndex].firstElementChild.getElementsByTagName("tr");
+    semesterDates = tablesHTML[tableIndex].children[1].getElementsByTagName("tr");
     for (var i = 0; i < semesterDates.length; i++) {
       if (semesterDates[i].firstElementChild.innerHTML.includes("First Day of Classes")) {
-        var day = semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+        var day = semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \d+)/g);
         startDate = new Date(day + ", " + year);
       }
       if (semesterDates[i].firstElementChild.innerHTML.includes("Last Day of Classes")) {
-        var day = semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \w+)/g);
+        var day = semesterDates[i].lastElementChild.innerHTML.match(/\s*(\w+ \d+)/g);
         endDate = new Date(day + ", " + year);
       }
     }
@@ -45,7 +39,7 @@ function getSemesterFirstAndLastDays(viewedSemester) {
     });
 }
 
-function DOMtoString(document_root) {
+function DOMtoString(document_root, provostCalendarHTML) {
     var html = '';
     var ccontainers = document_root.getElementsByClassName("course-card-container--info");
     var courseEventInfo = new Array();
@@ -58,7 +52,7 @@ function DOMtoString(document_root) {
     var viewedSemester = document_root.getElementsByClassName("schedule-print-header")[0].innerHTML.substring(19);
     validPage = true;
 
-    const semesterFirstAndLastDays = getSemesterFirstAndLastDays(viewedSemester);
+    const semesterFirstAndLastDays = getSemesterFirstAndLastDays(viewedSemester, provostCalendarHTML);
     const semFirstDate = semesterFirstAndLastDays.startDate;
     const semLastDate = semesterFirstAndLastDays.endDate;
 
@@ -255,7 +249,12 @@ function DOMtoString(document_root) {
     // });
 }
 
-chrome.runtime.sendMessage({
-    action: "getSource",
-    source: DOMtoString(document)
-});
+chrome.runtime.sendMessage(
+  { contentScriptQuery: 'queryProvostCalendar' },
+  provostCalendarHTML => {
+    chrome.runtime.sendMessage({
+      action: 'getSource',
+      source: DOMtoString(document, provostCalendarHTML),
+    });
+  }
+);

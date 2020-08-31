@@ -26,5 +26,9 @@
       "https://www.googleapis.com/auth/calendar"
     ]
   },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com https://www.google-analytics.com https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en_US.i0xByvRGaww.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCPwTfAUzE6XMjHX2OFK5MEMNlittQ/cb=gapi.loaded_0 https://apis.google.com/_/scs/apps-static/_/js/k=oz.gapi.en.oKHdHV2xpm0.O/m=client/rt=j/sv=1/d=1/ed=1/am=AQ/rs=AGLTcCNd8FlX7D-ugulSNNOrsQOkuRZJKA/cb=gapi.loaded_0; object-src 'self'"
 }
