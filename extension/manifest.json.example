@@ -14,10 +14,9 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "identity",
     "<all_urls>",
     "https://ajax.googleapis.com/*",
-    "https://www.provost.umd.edu/calendar/*",
+    "https://www.provost.umd.edu/*"
     "https://apis.google.com/*"
   ],
   "oauth2": {
